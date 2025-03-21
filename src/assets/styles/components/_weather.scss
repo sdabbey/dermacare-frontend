@@ -1,0 +1,79 @@
+.weather{
+    width: 49%;
+    height: 100%;
+    place-self: end;
+    border: 1px solid rgba(0, 0, 0, 0.181);
+    padding: .5rem;
+    border-radius: 10px;
+    display: flex;
+    box-sizing: border-box;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    .headline{
+        font-weight: 600;
+        margin: .5rem;
+    }
+    [data-joy-color-scheme="dark"] &{
+        border: 1px solid rgba(255, 255, 255, 0.181);
+        background: #0b0d0e;
+    }
+    .suggestion-content{
+        display: flex;
+        width: 100%;
+        box-sizing: border-box;
+        
+        .weather-details{
+            width: 35%;
+            
+            padding: 1rem;
+            box-sizing: border-box;
+            img{
+                width: 7rem;
+            }
+            .temp-details{
+                display: flex;
+                flex-direction: column;
+                .temperature{
+                    font-size: 1.7rem;
+                    font-weight: 500;
+                }
+                p{
+                    font-size: .8rem;
+                    margin: 0;
+                }
+                .extra-dets{
+                    display: flex;
+                    flex-direction: column;
+                    padding: .5rem 0;
+                    gap: .5rem;
+                    div{
+                        display: flex;
+                        word-wrap: nowrap;
+                        flex-wrap: nowrap;
+                        text-wrap: nowrap;
+                        gap: .5rem;
+                        span{
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+        }
+        .suggestion{
+            width: 65%;
+            
+            padding: 1rem 0rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            p{
+                margin: 0;
+                font-size: .8rem;
+            }
+        }
+    }
+}

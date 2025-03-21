@@ -1,0 +1,55 @@
+.sx__calendar{
+    [data-joy-color-scheme="dark"] &{
+        background: #0B0D0E;
+        color: white;
+    }
+}
+
+.sx__calendar-header .sx__today-button{
+    [data-joy-color-scheme="dark"] &{
+        color: white;
+    }
+}
+
+.sx__chevron-wrapper .sx__chevron{
+    [data-joy-color-scheme="dark"] &{
+        color: white;
+        border-color: rgba(255, 255, 255, 0.76) !important;
+    }
+}
+.sx__calendar-header{
+    [data-joy-color-scheme="dark"] &{
+        color: white;
+    }
+}
+.sx__date-input-label{
+    [data-joy-color-scheme="dark"] &{
+        color: white;
+        background: #0B0D0E;
+    }
+}
+.sx__date-input{
+    [data-joy-color-scheme="dark"] &{
+        background: #0B0D0E;
+        color: white;
+    }
+}
+
+.sx__event-modal-default{
+    
+    [data-joy-color-scheme="dark"] &{
+        background: #0B0D0E;
+        color: white;
+        box-shadow: 0 0px 15px 5px rgba(255, 255, 255, 0.03), 0 0px 10px 5px rgba(0, 0, 0, 0.03), 0 0px 5px -7px rgba(255, 255, 255, 0.04);
+    }
+}
+
+.sx__event-modal .sx__event-icon, .sx__has-icon .sx__event-icon{
+    [data-joy-color-scheme="dark"] &{
+        color: white;
+    }
+}
+
+[data-joy-color-scheme="dark"]:root{
+    --sx-internal-color-text: white;
+}

@@ -1,0 +1,27 @@
+@use "sass:color";
+.card-container {
+    overflow-y: auto;
+    max-height: 500px; /* Adjust as needed */
+    scrollbar-width: thin;
+    scrollbar-color: var(--sx-color-primary) transparent;
+  }
+  
+  /* WebKit (Chrome, Safari) */
+  .card-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .card-container::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+  
+  .card-container::-webkit-scrollbar-thumb {
+    background: var(--sx-color-primary);
+    border-radius: 10px;
+  }
+  
+  .card-container::-webkit-scrollbar-thumb:hover {
+    background: color.adjust(#0B6BCB, $lightness: 10%);
+  }
+  
