@@ -17,32 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios'
 
 
-interface Patient {
-  id: string;
-  label: string;
-}
 
-interface Doctor {
-  id: string;
-  label: string;
-
-}
-interface Prescription {
-  name: string;
-  direction: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-}
-
-interface AddPrescriptionModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: (formData: any) => void;
-  preselectedDoctor?: Doctor;
-  patientFirstName?: string;
-  patientLastName?: string;
-}
 
 export default function AddPrescriptionModal({
   open,
@@ -51,25 +26,25 @@ export default function AddPrescriptionModal({
   preselectedDoctor,
   patientFirstName = '',
   patientLastName = ''
-}: AddPrescriptionModalProps) {
-  const [patients, setPatients] = React.useState<Patient[]>([]);
-  const [doctors, setDoctors] = React.useState<Doctor[]>([]);
-  const [selectedPatient, setSelectedPatient] = React.useState<Patient>();
-  const [selectedDoctor, setSelectedDoctor] = React.useState<Doctor | undefined>(preselectedDoctor);
-  const [firstName, setFirstName] = React.useState<string>('');
-  const [lastName, setLastName] = React.useState<string>('');
-  const [name, setName] = React.useState<string>('');
-  const [direction, setDirection] = React.useState<string>('');
-  const [quantity, setQuantity] = React.useState<number>(1);
-  const [unitPrice, setUnitPrice] = React.useState<number>(0);
-  const [prescriptions, setPrescriptions] = React.useState<Prescription[]>([]);
-  const [alert, setAlert] = React.useState<{ message: string; type: 'success' | 'error' } | null>(null);
+}) {
+  const [patients, setPatients] = React.useState([]);
+  const [doctors, setDoctors] = React.useState([]);
+  const [selectedPatient, setSelectedPatient] = React.useState();
+  const [selectedDoctor, setSelectedDoctor] = React.useState(preselectedDoctor);
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [direction, setDirection] = React.useState('');
+  const [quantity, setQuantity] = React.useState(1);
+  const [unitPrice, setUnitPrice] = React.useState(0);
+  const [prescriptions, setPrescriptions] = React.useState([]);
+  const [alert, setAlert] = React.useState(null);
 
   React.useEffect(() => {
     // Fetch patients
     axios.get('https://emr-backend.up.railway.app/accounts/patients/')
         .then(response => {
-            setPatients(response.data.map((patient: any) => ({
+            setPatients(response.data.map((patient) => ({
                 id: patient.id,
                 label: `${patient.user.firstname} ${patient.user.lastname}`,
             })));
@@ -79,7 +54,7 @@ export default function AddPrescriptionModal({
     // Fetch doctors
     axios.get('https://emr-backend.up.railway.app/accounts/doctors/')
     .then(response => {
-        setDoctors(response.data.map((doc: any) => ({
+        setDoctors(response.data.map((doc) => ({
             id: doc.id,
             label: `Dr. ${doc.user.firstname} ${doc.user.lastname}`,
             
@@ -122,7 +97,7 @@ export default function AddPrescriptionModal({
   };
 
 
-  const handleDeletePrescription = (index: number) => {
+  const handleDeletePrescription = (index) => {
     const updatedPrescriptions = prescriptions.filter((_, i) => i !== index);
     setPrescriptions(updatedPrescriptions);
   };
@@ -189,7 +164,7 @@ export default function AddPrescriptionModal({
                   <FormLabel>Patient</FormLabel>
                   <Autocomplete
                         value={selectedPatient}
-                        onChange={(event, newValue : any) => setSelectedPatient({
+                        onChange={(event, newValue) => setSelectedPatient({
                           id: newValue.id,
                           label: newValue.label
                         })}
@@ -206,7 +181,7 @@ export default function AddPrescriptionModal({
                   <FormLabel>Doctor</FormLabel>
                   <Autocomplete
                     value={selectedDoctor}
-                    onChange={(event, newValue: any) => setSelectedDoctor({
+                    onChange={(event, newValue) => setSelectedDoctor({
                       id: newValue.id,
                       label: newValue.label
                     })}

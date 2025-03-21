@@ -14,24 +14,9 @@ import 'jspdf-autotable';
 import Button from '@mui/joy/Button';
 import PrintRoundedIcon from '@mui/icons-material/PrintRounded';
 
-interface History {
-  drug: string;
-  usage: string;
-  quantity: number;
-  total_price: number;
-}
-
-interface RowData {
-  id: string;
-  name: string;
-  date: string;
-  doctor: string;
-  total_amount: number;
-  history: History[];
-}
 
 // Function to download the PDF
-const downloadPDF = (row: RowData) => {
+const downloadPDF = (row) => {
   const pdf = new jsPDF();
   const pageWidth = pdf.internal.pageSize.width;
   pdf.text(`${row.name}'s Prescription History`, 14, 22);
@@ -50,17 +35,17 @@ const downloadPDF = (row: RowData) => {
     total_price: historyItem.total_price.toFixed(2),
   }));
 
-  (pdf as any).autoTable({
+  (pdf).autoTable({
     startY: 30,
     head: [columns.map(col => col.header)],
-    body: rows.map(row => columns.map(col => row[col.dataKey as keyof typeof row])),
+    body: rows.map(row => columns.map(col => row[col.dataKey])),
   });
 
   const signatureElement = document.getElementById('signature');
   if (signatureElement) {
     html2canvas(signatureElement).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      pdf.addImage(imgData, 'PNG', pageWidth - 60 - 10, (pdf as any).autoTable.previous.finalY + 10, 65, 10);
+      pdf.addImage(imgData, 'PNG', pageWidth - 60 - 10, (pdf).autoTable.previous.finalY + 10, 65, 10);
       pdf.save(`${row.name}_Prescription_History.pdf`);
     }).catch(error => {
       console.error('Error capturing signature:', error);
@@ -70,7 +55,7 @@ const downloadPDF = (row: RowData) => {
   }
 };
 
-function Row(props: { row: RowData; initialOpen?: boolean }) {
+function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(props.initialOpen || false);
 
@@ -151,20 +136,20 @@ function Row(props: { row: RowData; initialOpen?: boolean }) {
 }
 
 export default function PrescriptionsTable() {
-  const [rows, setRows] = useState<RowData[]>([]);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     axios.get('https://emr-backend.up.railway.app/clinic/prescriptions/')
       .then(response => {
-        const prescriptions = response.data.map((prescription: any) => {
-          const totalAmount = prescription.drugs.reduce((sum: number, drug: any) => sum + parseFloat(drug.total_price), 0);
+        const prescriptions = response.data.map((prescription) => {
+          const totalAmount = prescription.drugs.reduce((sum, drug) => sum + parseFloat(drug.total_price), 0);
           return {
             id: prescription.id,
             name: `${prescription.patient.firstName} ${prescription.patient.lastName}`,
             date: new Date(prescription.date_prescribed).toLocaleDateString(),
             doctor: `${prescription.doctor.firstName} ${prescription.doctor.lastName}`,
             total_amount: totalAmount,
-            history: prescription.drugs.map((drug: any) => ({
+            history: prescription.drugs.map((drug) => ({
               drug: drug.name,
               usage: drug.direction,
               quantity: drug.quantity,

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
+
 import Box from '@mui/joy/Box';
 import Avatar from '@mui/joy/Avatar';
 import Chip from '@mui/joy/Chip';
@@ -29,7 +29,7 @@ const listItems = [
   {
     id: 'INV-1234',
     date: 'Feb 3, 2023',
-    status: 'Refunded',
+    status: 'Discharged',
     customer: {
       initial: 'O',
       name: 'Olivia Ryhe',
@@ -108,7 +108,7 @@ function RowMenu() {
   );
 }
 
-export default function TreatmentList() {
+export default function PatientList() {
   return (
     <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
       {listItems.map((listItem) => (
@@ -152,7 +152,7 @@ export default function TreatmentList() {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <Link level="body-sm" component="button">
-                    Download
+                    View
                   </Link>
                   <RowMenu />
                 </Box>
@@ -163,17 +163,18 @@ export default function TreatmentList() {
               size="sm"
               startDecorator={
                 {
-                  Paid: <CheckRoundedIcon />,
-                  Refunded: <AutorenewRoundedIcon />,
-                  Cancelled: <BlockIcon />,
+                    Discharged: <CheckRoundedIcon />,
+                    Active: <AutorenewRoundedIcon />,
+                    Observation: <BlockIcon />,
+                    FollowUp: <BlockIcon/>
                 }[listItem.status]
               }
               color={
                 {
-                  Paid: 'success',
-                  Refunded: 'neutral',
-                  Cancelled: 'danger',
-                }[listItem.status] as ColorPaletteProp
+                    Discharged: 'success',
+                    Observation: 'neutral',
+                    FollowUp: 'warning',
+                }[listItem.status]
               }
             >
               {listItem.status}

@@ -1,6 +1,7 @@
-import React from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import * as React from 'react';
+
+import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Chip from '@mui/joy/Chip';
@@ -16,31 +17,29 @@ import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Table from '@mui/joy/Table';
 import Sheet from '@mui/joy/Sheet';
-import Checkbox from '@mui/joy/Checkbox';
 import IconButton, { iconButtonClasses } from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
-import axios from 'axios';
+import PreviewIcon from '@mui/icons-material/Preview';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import { format } from 'date-fns';
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-import AddTreatmentModal from './AddTreatmentModal';
+import { Link as RouterLink } from 'react-router-dom';
 
-interface Treatment {
-  id: number;
-  name: string;
-  price: number;
-  estimated_duration: string;
-  visit_type: string;
-}
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+
+
+
+function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -50,23 +49,19 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
+function getComparator(
+  order,
+  orderBy,
+) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
@@ -76,26 +71,8 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
   });
   return stabilizedThis.map((el) => el[0]);
 }
-interface TreatmentTableProps {
-  treatments: Treatment[];
-  onOpenModal: () => void;
-  onTreatmentDeleted: (id: number) => void; // Callback to update the state after deletion
-}
 
-const deleteTreatment = async (id: number) => {
-  await axios.delete(`https://emr-backend.up.railway.app/clinic/treatments/${id}/`);
-};
-
-const RowMenu: React.FC<{ treatmentId: number; onDelete: (id: number) => void }> = ({ treatmentId, onDelete }) => {
-  const handleDelete = async () => {
-    try {
-      await deleteTreatment(treatmentId); // DELETE request to Django API
-      onDelete(treatmentId); // Update the state in the parent component
-    } catch (error) {
-      console.error('Failed to delete treatment:', error);
-    }
-  };
-
+const RowMenu = ({patient}) => {
   return (
     <Dropdown>
       <MenuButton
@@ -105,63 +82,81 @@ const RowMenu: React.FC<{ treatmentId: number; onDelete: (id: number) => void }>
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem>Edit</MenuItem>
+        <Link
+        
+          component={RouterLink}
+          to={`/patients/${patient.id}`}
+          
+          
+        >
+          <MenuItem sx={{flexGrow: 1}}>View</MenuItem>
+      
+        </Link>
+        
+        
         <Divider />
-        <MenuItem color="danger" onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem color="primary">Update Details</MenuItem>
       </Menu>
     </Dropdown>
   );
-};
+}
 
-const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatmentDeleted, onOpenModal }) => {
-  const [order, setOrder] = React.useState<'asc' | 'desc'>('desc');
-  const [selected, setSelected] = React.useState<number[]>([]);
+export default function PatientTable() {
+  const [order, setOrder] = React.useState('desc');
+  const [patients, setPatients] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  // const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
-  const handleDelete = (id: number) => {
-    onTreatmentDeleted(id);
-  };
+  React.useEffect(() => {
+    // Fetch patient data from the backend
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch('https://emr-backend.up.railway.app/accounts/patients/'); // Adjust the API endpoint as needed
+        const data = await response.json();
+        setPatients(data);
+      } catch (error) {
+        console.error('Failed to fetch patient data:', error);
+      }
+    };
 
-  const handleOpen = () => onOpenModal();
-  const handleClose = () => setOpen(false);
-
+    fetchPatients();
+  }, []);
   const renderFilters = () => (
     <React.Fragment>
       <FormControl size="sm">
-        <FormLabel>Type of Visit</FormLabel>
+        <FormLabel>Status</FormLabel>
         <Select
           size="sm"
-          placeholder="Filter by visit"
+          placeholder="Filter by status"
           slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
         >
-          <Option value="single">Single Visit</Option>
-          <Option value="multiple">Multiple Visit</Option>
+          <Option value="active">Active Treatment</Option>
+          <Option value="under-observation">Under Observation</Option>
+          <Option value="discharged">Discharged</Option>
+    
+        </Select>
+      </FormControl>
+      
+      <FormControl size="sm">
+        <FormLabel>Gender</FormLabel>
+        <Select size="sm" placeholder="All">
+          <Option value="all">All</Option>
+          <Option value="male">Male</Option>
+          <Option value="female">Female</Option>
+          <Option value="other">Other</Option>
         </Select>
       </FormControl>
     </React.Fragment>
   );
-
   return (
     <React.Fragment>
       <Sheet
         className="SearchAndFilters-mobile"
         sx={{
           display: { xs: 'flex', sm: 'none' },
-          flexWrap: { xs: 'wrap' },
           my: 1,
           gap: 1,
         }}
       >
-        <Button
-          color="primary"
-          startDecorator={<AddRoundedIcon />}
-          size="sm"
-          sx={{ display: "flex", alignItems: "center", mb: { xs: 1 } }}
-          onClick={handleOpen}
-        >
-          Add Treatment
-        </Button>
         <Input
           size="sm"
           placeholder="Search"
@@ -198,7 +193,6 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
           borderRadius: 'sm',
           py: 2,
           display: { xs: 'none', sm: 'flex' },
-          alignItems: 'flex-end',
           flexWrap: 'wrap',
           gap: 1.5,
           '& > *': {
@@ -207,22 +201,13 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
         }}
       >
         <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for treatment</FormLabel>
-          <Input size="sm" placeholder="Search by treatment name" sx={{ width: { sm: "50%", xs: "100%" } }} startDecorator={<SearchIcon />} />
+          <FormLabel>Search for patient</FormLabel>
+          <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
         </FormControl>
         {renderFilters()}
-        <Button
-          color="primary"
-          startDecorator={<AddRoundedIcon />}
-          size="sm"
-          sx={{ display: "flex", alignItems: "center" }}
-          onClick={handleOpen}
-        >
-          Add Treatment
-        </Button>
       </Box>
       <Sheet
-        className="RevenueTableContainer"
+        className="PatientTableContainer"
         variant="outlined"
         sx={{
           display: { xs: 'none', sm: 'initial' },
@@ -247,25 +232,8 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
         >
           <thead>
             <tr>
-              <th style={{ width: 35, textAlign: 'center', padding: '12px 6px' }}>
-                <Checkbox
-                  size="sm"
-                  indeterminate={selected.length > 0 && selected.length !== treatments.length}
-                  checked={selected.length === treatments.length}
-                  onChange={(event) => {
-                    setSelected(
-                      event.target.checked ? treatments.map((row) => row.id) : [],
-                    );
-                  }}
-                  color={
-                    selected.length > 0 || selected.length === treatments.length
-                      ? 'primary'
-                      : undefined
-                  }
-                  sx={{ verticalAlign: 'text-bottom' }}
-                />
-              </th>
-              <th style={{ width: 240, padding: '12px 6px' }}>
+              
+              <th style={{ width: 100, padding: '12px' }}>
                 <Link
                   underline="none"
                   color="primary"
@@ -281,66 +249,77 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
                     },
                   }}
                 >
-                  Treatment Name
+                 ID
                 </Link>
               </th>
-              <th style={{ width: 140, padding: '12px 6px' }}>Price</th>
-              <th style={{ width: 140, padding: '12px 6px' }}>Estimated Duration</th>
-              <th style={{ width: 100, padding: '12px 6px' }}>Type of Visit</th>
-              <th style={{ width: 50, padding: '12px 6px' }}> </th>
+              <th style={{ width: 120, padding: '12px 6px' }}>Registered</th>
+              <th style={{ width: 120, padding: '12px 6px' }}>Status</th>
+              <th style={{ width: 210, padding: '12px 6px' }}>Patient Details</th>
+              <th style={{ width: 120, padding: '12px 6px' }}>Phone</th>
+              <th style={{ width: 120, padding: '12px 6px' }}>Address</th>
+              <th style={{ width: 80, padding: '12px 6px' }}> </th>
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(treatments) && stableSort(treatments, getComparator(order, 'name')).map((row) => (
-              <tr key={row.id}>
-                <td style={{ textAlign: 'center', width: 120 }}>
-                  <Checkbox
-                    size="sm"
-                    checked={selected.includes(row.id)}
-                    color={selected.includes(row.id) ? 'primary' : undefined}
-                    onChange={(event) => {
-                      setSelected((ids) =>
-                        event.target.checked
-                          ? ids.concat(row.id)
-                          : ids.filter((itemId) => itemId !== row.id),
-                      );
-                    }}
-                    slotProps={{ checkbox: { sx: { textAlign: 'left' } } }}
-                    sx={{ verticalAlign: 'text-bottom' }}
-                  />
+            {stableSort(patients, getComparator(order, 'id')).map((patient) => (
+              <tr key={patient.id}>
+                
+                <td>
+                  <Typography level="body-xs" sx={{pl: 1}}>{patient.id}</Typography>
                 </td>
                 <td>
-                  <Typography level="body-xs" fontWeight={'bold'}>{row.name}</Typography>
-                </td>
-                <td>
-                  <Typography level="body-xs"> <b>${row.price}</b></Typography>
-                </td>
-                <td>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Typography level="body-xs">{row.estimated_duration}</Typography>
-                  </Box>
+                  <Typography level="body-xs">{format(new Date(patient.reg_date), 'yyyy-MM-dd')}</Typography>
                 </td>
                 <td>
                   <Chip
                     variant="soft"
                     size="sm"
+                    startDecorator={
+                      {
+                        discharged: <CheckRoundedIcon />,
+                        active: <AutorenewRoundedIcon />,
+                        observation: <PreviewIcon />,
+                      
+                      }[patient.status]
+                    }
                     color={
                       {
-                        single: 'success',
-                        multiple: 'warning',
-                      }[row.visit_type] as ColorPaletteProp
+                        discharged: 'success',
+                        observation: 'neutral',
+                        active: 'warning',
+                      }[patient.status] 
                     }
                   >
-                    {row.visit_type === "single" ? "Single Visit" : "Multiple Visit"}
+                    {patient.status.toUpperCase()}
                   </Chip>
                 </td>
                 <td>
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <RowMenu
-                      key={row.id}
-                      treatmentId={row.id}
-                      onDelete={handleDelete}
-                    />
+                    <Avatar size="sm">{patient.user.firstname?.charAt(0)}</Avatar>
+                    <div>
+                      <Typography level="body-xs">{patient.user.firstname} {patient.user.lastname}</Typography>
+                      <Typography level="body-xs">{patient.user.email}</Typography>
+                    </div>
+                    
+                  </Box>
+                </td>
+                <td>
+                    <Typography level="body-xs">{patient.contact_number}</Typography>
+                </td>
+                <td>
+                  <Typography level="body-xs">{patient.address}</Typography>
+                </td>
+                <td>
+                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                  <Link
+                    component={RouterLink}
+                    to={`/patients/${patient.id}`}
+                    level="body-xs"
+                    
+                  >
+                    View
+                  </Link>
+                    <RowMenu patient={patient}/>
                   </Box>
                 </td>
               </tr>
@@ -368,6 +347,7 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
         >
           Previous
         </Button>
+
         <Box sx={{ flex: 1 }} />
         {['1', '2', '3', '…', '8', '9', '10'].map((page) => (
           <IconButton
@@ -380,6 +360,7 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
           </IconButton>
         ))}
         <Box sx={{ flex: 1 }} />
+
         <Button
           size="sm"
           variant="outlined"
@@ -389,9 +370,6 @@ const TreatmentTable: React.FC<TreatmentTableProps> = ({ treatments, onTreatment
           Next
         </Button>
       </Box>
-      
     </React.Fragment>
   );
-};
-
-export default TreatmentTable;
+}

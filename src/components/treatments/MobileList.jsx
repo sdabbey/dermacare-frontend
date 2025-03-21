@@ -19,7 +19,9 @@ import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
 
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import BlockIcon from '@mui/icons-material/Block';
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
@@ -27,8 +29,8 @@ const listItems = [
   {
     id: 'INV-1234',
     date: 'Feb 3, 2023',
-    status: 'Discharged',
-    staff: {
+    status: 'Refunded',
+    customer: {
       initial: 'O',
       name: 'Olivia Ryhe',
       email: 'olivia@email.com',
@@ -38,7 +40,7 @@ const listItems = [
     id: 'INV-1233',
     date: 'Feb 3, 2023',
     status: 'Paid',
-    staff: {
+    customer: {
       initial: 'S',
       name: 'Steve Hampton',
       email: 'steve.hamp@email.com',
@@ -48,7 +50,7 @@ const listItems = [
     id: 'INV-1232',
     date: 'Feb 3, 2023',
     status: 'Refunded',
-    staff: {
+    customer: {
       initial: 'C',
       name: 'Ciaran Murray',
       email: 'ciaran.murray@email.com',
@@ -58,7 +60,7 @@ const listItems = [
     id: 'INV-1231',
     date: 'Feb 3, 2023',
     status: 'Refunded',
-    staff: {
+    customer: {
       initial: 'M',
       name: 'Maria Macdonald',
       email: 'maria.mc@email.com',
@@ -68,7 +70,7 @@ const listItems = [
     id: 'INV-1230',
     date: 'Feb 3, 2023',
     status: 'Cancelled',
-    staff: {
+    customer: {
       initial: 'C',
       name: 'Charles Fulton',
       email: 'fulton@email.com',
@@ -78,7 +80,7 @@ const listItems = [
     id: 'INV-1229',
     date: 'Feb 3, 2023',
     status: 'Cancelled',
-    staff: {
+    customer: {
       initial: 'J',
       name: 'Jay Hooper',
       email: 'hooper@email.com',
@@ -98,6 +100,7 @@ function RowMenu() {
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem>Edit</MenuItem>
         <MenuItem>Rename</MenuItem>
+        <MenuItem>Move</MenuItem>
         <Divider />
         <MenuItem color="danger">Delete</MenuItem>
       </Menu>
@@ -105,7 +108,7 @@ function RowMenu() {
   );
 }
 
-export default function StaffList() {
+export default function TreatmentList() {
   return (
     <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
       {listItems.map((listItem) => (
@@ -125,14 +128,14 @@ export default function StaffList() {
           >
             <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
               <ListItemDecorator>
-                <Avatar size="sm">{listItem.staff.initial}</Avatar>
+                <Avatar size="sm">{listItem.customer.initial}</Avatar>
               </ListItemDecorator>
               <div>
                 <Typography fontWeight={600} gutterBottom>
-                  {listItem.staff.name}
+                  {listItem.customer.name}
                 </Typography>
                 <Typography level="body-xs" gutterBottom>
-                  {listItem.staff.email}
+                  {listItem.customer.email}
                 </Typography>
                 <Box
                   sx={{
@@ -149,7 +152,7 @@ export default function StaffList() {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <Link level="body-sm" component="button">
-                    View
+                    Download
                   </Link>
                   <RowMenu />
                 </Box>
@@ -158,13 +161,19 @@ export default function StaffList() {
             <Chip
               variant="soft"
               size="sm"
-             
+              startDecorator={
+                {
+                  Paid: <CheckRoundedIcon />,
+                  Refunded: <AutorenewRoundedIcon />,
+                  Cancelled: <BlockIcon />,
+                }[listItem.status]
+              }
               color={
                 {
-                    FullTime: 'success',
-                    PartTime: 'neutral',
-                    Suspended: 'warning',
-                }[listItem.status] as ColorPaletteProp
+                  Paid: 'success',
+                  Refunded: 'neutral',
+                  Cancelled: 'danger',
+                }[listItem.status]
               }
             >
               {listItem.status}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
-import { NumericFormat, NumericFormatProps } from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import Option from '@mui/joy/Option';
 import Input from '@mui/joy/Input';
 import Stack from '@mui/joy/Stack';
@@ -14,28 +14,11 @@ import axios from 'axios'
 import ModalClose from '@mui/joy/ModalClose';
 import Select from '@mui/joy/Select';
 import Divider from '@mui/joy/Divider';
-import AlertVariousStates from '../../components/AlertVariousStates';
-
-interface Treatment {
-  id: number;
-  name: string;
-  price: number;
-  estimated_duration: string;
-  visit_type: string;
-}
-interface AddTreatmentProps{
-    open: boolean;
-    onClose: () => void;
-    //onAddTreatment: (treatmentData: any) => void;
-}
+import AlertVariousStates from '../AlertVariousStates';
 
 
-interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
 
-const NumericFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
+const NumericFormatAdapter = React.forwardRef(
   function NumericFormatAdapter(props, ref) {
     const { onChange, ...other } = props;
 
@@ -59,7 +42,7 @@ const NumericFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
   },
 );
 
-export default function AddTreatmentModal({open, onClose}: AddTreatmentProps) {
+export default function AddTreatmentModal({open, onClose}) {
   const [time, setTime] = React.useState('mins');
   const [formData, setFormData] = React.useState({
     treatment_name: '',
@@ -67,14 +50,14 @@ export default function AddTreatmentModal({open, onClose}: AddTreatmentProps) {
     estimated_duration: '',
     visit_type: ''
   })
-  const [alert, setAlert] = React.useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [alert, setAlert] = React.useState(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (event: any, value: string | null) => {
+  const handleSelectChange = (event, value) => {
     if (typeof value === 'string') {
       setFormData((prev) => ({ ...prev, visit_type: value }));
     }
@@ -174,7 +157,7 @@ export default function AddTreatmentModal({open, onClose}: AddTreatmentProps) {
                             variant="plain"
                             value={time}
                             size="sm"
-                            onChange={(_, value) => setTime(value!)}
+                            onChange={(_, value) => setTime(value)}
                             slotProps={{
                               listbox: {
                                 variant: 'outlined',

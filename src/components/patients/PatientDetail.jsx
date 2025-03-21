@@ -15,47 +15,12 @@ import Button from '@mui/joy/Button';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import AddAppointmentModal from '../appointments/AddAppointmentModal';
 
-interface Patient{
-    id: string | number;
-    user: {
-      firstname: string;
-      lastname: string;
-      email: string;
-    }
-    address: string;
-    contact_number: number;
-    gender: 'Male' | 'Female' | 'Other';
-    date_of_birth: string;
-    work: string;
-    height: number;
-    status: 'Discharged' | 'Active' | 'Observation';
-    reg_date: string;
-   
-    
-}
 
-interface Appointment {
-    id: string;
-    time: string;
-    treatment: string;
-    price: number;
-    doctor: string;
-    patient: {
-      firstName: string;
-      lastName: string;
-    };
-  }
-interface Doctor {
-    id: string;
-    doctor: string;
-    avatar: string;
-    available: string;
-    appointments: Appointment[];
-  }
+
   
   const initialListItems = [
     {
-        id: 'STF-001',
+        id: 1,
         doctor: 'Dr. James Hayford',
         avatar: '/user/avatar.jpg',
         available: 'yes',
@@ -142,16 +107,16 @@ const listItems = [
 ]
 
 export default function PatientDetail(){
-    const { id } = useParams<{ id: string }>();
-    const [patient, setPatient] = React.useState<Patient>();
+    const { id } = useParams();
+    const [patient, setPatient] = React.useState();
 
-    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-    const [appointmentListItems, setAppointmentListItems] = React.useState<Doctor[]>(initialListItems);
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const [appointmentListItems, setAppointmentListItems] = React.useState(initialListItems);
 
     const handleOpen = () => setModalOpen(true);
     const handleClose = () => setModalOpen(false);
 
-    const handleSubmitAppointment = (newAppointment: any) => {
+    const handleSubmitAppointment = (newAppointment) => {
       console.log("New Appointment Data:", newAppointment)
       setAppointmentListItems(prevItems => {
         console.log("Previous Items:", prevItems);
@@ -207,6 +172,7 @@ export default function PatientDetail(){
             const data = await response.json();
             console.log(data);
             setPatient(data);
+            
           } catch (error) {
             console.error('Failed to fetch patient details:', error);
           }
@@ -215,6 +181,7 @@ export default function PatientDetail(){
         fetchPatientDetail();
       }, [id]);
       
+     
       if (!patient) {
         return <p>Loading...</p>;
       }

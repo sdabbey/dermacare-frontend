@@ -22,34 +22,9 @@ import Divider from '@mui/joy/Divider';
 import EventBusyRoundedIcon from '@mui/icons-material/EventBusyRounded';
 import AddAppointmentModal from './AddAppointmentModal';
 
-interface Doctor {
-    id: string;
-    label: string;
-  
-  }
-interface Patient {
-    firstName: string;
-    lastName: string;
-}
-interface Appointment {
-    id: string;
-    staff: string;
-    treatment: string;
-    price: number;
-    appointment_date: string;
-    patient: Patient;
-}
-  
-interface DoctorItem {
-    id: string;
-    staff: string;
-    avatar: string;
-    available: string;
-    appointments: Appointment[];
-}
 
   
-function RowMenu({ doctor, onAddAppointment }: { doctor: DoctorItem; onAddAppointment: (doctor: DoctorItem) => void }) {
+function RowMenu({ doctor, onAddAppointment }) {
     return (
         <Dropdown>
             <MenuButton
@@ -72,17 +47,14 @@ function RowMenu({ doctor, onAddAppointment }: { doctor: DoctorItem; onAddAppoin
     );
 }
 
-interface AppointmentsTableProps {
-    listItems: DoctorItem[];
-    onSubmitAppointment: (appointment: Appointment) => void;
-}
 
-export default function AppointmentsTable({ listItems, onSubmitAppointment }: AppointmentsTableProps) {
+
+export default function AppointmentsTable({ listItems, onSubmitAppointment }) {
    
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedDoctor, setSelectedDoctor] = useState<Doctor | undefined>(undefined);
+    const [selectedDoctor, setSelectedDoctor] = useState(undefined);
 
-    const handleAddAppointment = (doctor: DoctorItem) => {
+    const handleAddAppointment = (doctor) => {
         console.log("Handle Add Appointment Called with Doctor:", doctor);
         setSelectedDoctor({
             id: doctor.id,
@@ -96,7 +68,7 @@ export default function AppointmentsTable({ listItems, onSubmitAppointment }: Ap
         setSelectedDoctor(undefined);
     };
 
-    const handleSubmitAppointment = (newAppointment: Appointment) => {
+    const handleSubmitAppointment = (newAppointment) => {
         console.log("New Appointment Submitted:", newAppointment);
         onSubmitAppointment(newAppointment);
         handleCloseModal();

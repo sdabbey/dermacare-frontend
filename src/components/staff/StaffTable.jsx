@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
@@ -131,31 +130,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 // ];
 
 
-interface Staff {
-  id: number;
-  avatar: string | File;
-  user: {
-    firstname: string;
-    lastname: string;
-    email: string;
-    role: string;
-  };
-  address: string;
-  contact_number: string;
-  work_status: string;
-  specialization: string;
-  assigned_treatment: string;
-  gender: string;
-  date_of_birth: string;
-  working_days: string[];
-  created_at: string;
-}
 
-interface RowMenuProps {
-  staffmember: Staff;
-}
 
-const statusColors: { [key: string]: ColorPaletteProp } = {
+
+
+const statusColors = {
   'full-time': 'success',
   'part-time': 'warning',
   'consultant': 'danger',
@@ -163,11 +142,11 @@ const statusColors: { [key: string]: ColorPaletteProp } = {
 };
 
 
-function getStatusColor(status: string): ColorPaletteProp {
+function getStatusColor(status) {
   return statusColors[status.toLowerCase()] || 'defaultColor'; // 'defaultColor' is a fallback
 }
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -177,15 +156,11 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
+function getComparator(
+  order,
+  orderBy,
+) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -195,8 +170,8 @@ function getComparator<Key extends keyof any>(
 // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
 // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
 // with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
@@ -207,7 +182,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
   return stabilizedThis.map((el) => el[0]);
 }
 
-const RowMenu: React.FC<RowMenuProps> = ({staffmember}) => {
+const RowMenu = ({staffmember}) => {
   return (
     <Dropdown>
       <MenuButton
@@ -237,8 +212,8 @@ const RowMenu: React.FC<RowMenuProps> = ({staffmember}) => {
 }
 
 export default function StaffTable() {
-  const [order, setOrder] = React.useState<Order>('desc');
-  const [staff, setStaff] = React.useState<Staff[]>([]);
+  const [order, setOrder] = React.useState('desc');
+  const [staff, setStaff] = React.useState([]);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {

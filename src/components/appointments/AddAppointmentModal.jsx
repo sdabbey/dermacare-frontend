@@ -14,32 +14,9 @@ import DialogContent from '@mui/joy/DialogContent';
 import ModalClose from '@mui/joy/ModalClose';
 import Select from '@mui/joy/Select';
 import Autocomplete from '@mui/joy/Autocomplete';
-import AlertVariousStates from '../../components/AlertVariousStates';
-interface Patient {
-  id: string;
-  label: string;
-}
+import AlertVariousStates from '../AlertVariousStates';
 
-interface Doctor {
-  id: string;
-  label: string;
 
-}
-
-interface Treatment {
-  value: string;
-  label: string;
-  price: number;
-}
-
-interface AddAppointmentModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: (appointmentData: any) => void;
-  preselectedDoctor?: Doctor;
-  patientFirstName?: string;
-  patientLastName?: string;
-}
 
 export default function AddAppointmentModal({
   open,
@@ -48,25 +25,25 @@ export default function AddAppointmentModal({
   preselectedDoctor,
   patientFirstName = '',
   patientLastName = '',
-}: AddAppointmentModalProps) {
-  const [patients, setPatients] = React.useState<Patient[]>([]);
-  const [doctors, setDoctors] = React.useState<Doctor[]>([]);
-  const [treatments, setTreatments] = React.useState<Treatment[]>([]);
-  const [selectedPatient, setSelectedPatient] = React.useState<Patient>();
-  const [selectedDoctor, setSelectedDoctor] = React.useState<Doctor | undefined>(preselectedDoctor);
-  const [selectedTreatment, setSelectedTreatment] = React.useState<Treatment | null>(null);
-  const [price, setPrice] = React.useState<number | string>('');
-  const [firstName, setFirstName] = React.useState<string>(patientFirstName || '');
-  const [lastName, setLastName] = React.useState<string>(patientLastName || '');
-  const [date, setDate] = React.useState<string>('');
-  const [alert, setAlert] = React.useState<{ message: string; type: 'success' | 'error' } | null>(null);
+}) {
+  const [patients, setPatients] = React.useState([]);
+  const [doctors, setDoctors] = React.useState([]);
+  const [treatments, setTreatments] = React.useState([]);
+  const [selectedPatient, setSelectedPatient] = React.useState();
+  const [selectedDoctor, setSelectedDoctor] = React.useState(preselectedDoctor);
+  const [selectedTreatment, setSelectedTreatment] = React.useState(null);
+  const [price, setPrice] = React.useState('');
+  const [firstName, setFirstName] = React.useState(patientFirstName || '');
+  const [lastName, setLastName] = React.useState(patientLastName || '');
+  const [date, setDate] = React.useState('');
+  const [alert, setAlert] = React.useState(null);
   const isReadOnly = firstName !== '' && lastName !== '';
 
   React.useEffect(() => {
     // Fetch patients
     axios.get('https://emr-backend.up.railway.app/accounts/patients/')
         .then(response => {
-            setPatients(response.data.map((patient: any) => ({
+            setPatients(response.data.map((patient) => ({
                 id: patient.id,
                 label: `${patient.user.firstname} ${patient.user.lastname}`,
             })));
@@ -76,7 +53,7 @@ export default function AddAppointmentModal({
     // Fetch doctors
     axios.get('https://emr-backend.up.railway.app/accounts/doctors/')
     .then(response => {
-        setDoctors(response.data.map((doc: any) => ({
+        setDoctors(response.data.map((doc) => ({
             id: doc.id,
             label: `Dr. ${doc.user.firstname} ${doc.user.lastname}`,
             
@@ -86,7 +63,7 @@ export default function AddAppointmentModal({
     // Fetch treatments
     axios.get('https://emr-backend.up.railway.app/clinic/treatments')
         .then(response => {
-            setTreatments(response.data.map((treatment: any) => ({
+            setTreatments(response.data.map((treatment) => ({
                 value: treatment.id,
                 label: treatment.name,
                 price: treatment.price,
@@ -107,7 +84,7 @@ export default function AddAppointmentModal({
     setLastName(patientLastName);
   }, [patientFirstName, patientLastName]);
 
-  const handleTreatmentChange = (event: any, newValue: string | null) => {
+  const handleTreatmentChange = (event, newValue) => {
     const selected = treatments.find(treatment => treatment.value === newValue) || null;
     setSelectedTreatment(selected);
     setPrice(selected?.price || '');
@@ -173,7 +150,7 @@ export default function AddAppointmentModal({
                     <FormLabel>Patient</FormLabel>
                     <Autocomplete
                       value={selectedPatient}
-                      onChange={(event, newValue : any) => setSelectedPatient({
+                      onChange={(event, newValue) => setSelectedPatient({
                         id: newValue.id,
                         label: newValue.label
                       })}
@@ -200,7 +177,7 @@ export default function AddAppointmentModal({
                   <FormLabel>Doctor</FormLabel>
                   <Autocomplete
                     value={selectedDoctor}
-                    onChange={(event, newValue : any) => setSelectedDoctor({
+                    onChange={(event, newValue) => setSelectedDoctor({
                       id: newValue.id,
                       label: newValue.label
                     })}

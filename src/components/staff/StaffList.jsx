@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
+
 import Box from '@mui/joy/Box';
 import Avatar from '@mui/joy/Avatar';
 import Chip from '@mui/joy/Chip';
@@ -19,9 +19,7 @@ import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
 
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import BlockIcon from '@mui/icons-material/Block';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
@@ -30,7 +28,7 @@ const listItems = [
     id: 'INV-1234',
     date: 'Feb 3, 2023',
     status: 'Discharged',
-    customer: {
+    staff: {
       initial: 'O',
       name: 'Olivia Ryhe',
       email: 'olivia@email.com',
@@ -40,7 +38,7 @@ const listItems = [
     id: 'INV-1233',
     date: 'Feb 3, 2023',
     status: 'Paid',
-    customer: {
+    staff: {
       initial: 'S',
       name: 'Steve Hampton',
       email: 'steve.hamp@email.com',
@@ -50,7 +48,7 @@ const listItems = [
     id: 'INV-1232',
     date: 'Feb 3, 2023',
     status: 'Refunded',
-    customer: {
+    staff: {
       initial: 'C',
       name: 'Ciaran Murray',
       email: 'ciaran.murray@email.com',
@@ -60,7 +58,7 @@ const listItems = [
     id: 'INV-1231',
     date: 'Feb 3, 2023',
     status: 'Refunded',
-    customer: {
+    staff: {
       initial: 'M',
       name: 'Maria Macdonald',
       email: 'maria.mc@email.com',
@@ -70,7 +68,7 @@ const listItems = [
     id: 'INV-1230',
     date: 'Feb 3, 2023',
     status: 'Cancelled',
-    customer: {
+    staff: {
       initial: 'C',
       name: 'Charles Fulton',
       email: 'fulton@email.com',
@@ -80,7 +78,7 @@ const listItems = [
     id: 'INV-1229',
     date: 'Feb 3, 2023',
     status: 'Cancelled',
-    customer: {
+    staff: {
       initial: 'J',
       name: 'Jay Hooper',
       email: 'hooper@email.com',
@@ -100,7 +98,6 @@ function RowMenu() {
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem>Edit</MenuItem>
         <MenuItem>Rename</MenuItem>
-        <MenuItem>Move</MenuItem>
         <Divider />
         <MenuItem color="danger">Delete</MenuItem>
       </Menu>
@@ -108,7 +105,7 @@ function RowMenu() {
   );
 }
 
-export default function PatientList() {
+export default function StaffList() {
   return (
     <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
       {listItems.map((listItem) => (
@@ -128,14 +125,14 @@ export default function PatientList() {
           >
             <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
               <ListItemDecorator>
-                <Avatar size="sm">{listItem.customer.initial}</Avatar>
+                <Avatar size="sm">{listItem.staff.initial}</Avatar>
               </ListItemDecorator>
               <div>
                 <Typography fontWeight={600} gutterBottom>
-                  {listItem.customer.name}
+                  {listItem.staff.name}
                 </Typography>
                 <Typography level="body-xs" gutterBottom>
-                  {listItem.customer.email}
+                  {listItem.staff.email}
                 </Typography>
                 <Box
                   sx={{
@@ -161,20 +158,13 @@ export default function PatientList() {
             <Chip
               variant="soft"
               size="sm"
-              startDecorator={
-                {
-                    Discharged: <CheckRoundedIcon />,
-                    Active: <AutorenewRoundedIcon />,
-                    Observation: <BlockIcon />,
-                    FollowUp: <BlockIcon/>
-                }[listItem.status]
-              }
+             
               color={
                 {
-                    Discharged: 'success',
-                    Observation: 'neutral',
-                    FollowUp: 'warning',
-                }[listItem.status] as ColorPaletteProp
+                    FullTime: 'success',
+                    PartTime: 'neutral',
+                    Suspended: 'warning',
+                }[listItem.status]
               }
             >
               {listItem.status}

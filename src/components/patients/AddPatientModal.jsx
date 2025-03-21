@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
-import { NumericFormat, NumericFormatProps } from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import Option from '@mui/joy/Option';
 import Input from '@mui/joy/Input';
 import Stack from '@mui/joy/Stack';
@@ -14,25 +14,13 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import ModalClose from '@mui/joy/ModalClose';
 import Select from '@mui/joy/Select';
 import Divider from '@mui/joy/Divider';
-import AlertVariousStates from '../../components/AlertVariousStates';
+import AlertVariousStates from '../AlertVariousStates';
 import axios from 'axios'
-interface AddPatientModalProps {
-  open: boolean;
-  onClose: () => void;
-}
 
-interface FormElements extends HTMLFormControlsCollection {
-  email: HTMLInputElement;
-  password: HTMLInputElement;
-  confirmPassword: HTMLInputElement;
-  persistent: HTMLInputElement;
-}
-interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
 
-const NumericFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
+
+
+const NumericFormatAdapter = React.forwardRef(
   function NumericFormatAdapter(props, ref) {
     const { onChange, ...other } = props;
 
@@ -55,7 +43,7 @@ const NumericFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
   },
 );
 
-export default function AddPatientModal({ open, onClose }: AddPatientModalProps) {
+export default function AddPatientModal({ open, onClose }) {
   // State variables to store form data
  
   const [height, setHeight] = React.useState('metres');
@@ -76,20 +64,20 @@ export default function AddPatientModal({ open, onClose }: AddPatientModalProps)
     confirmPassword: '',
   });
 
-  const [alert, setAlert] = React.useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [alert, setAlert] = React.useState(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (event: any, value: string | null) => {
+  const handleSelectChange = (event, value) => {
     if (typeof value === 'string') {
       setFormData((prev) => ({ ...prev, gender: value }));
     }
   };
 
-  function getCookie(name: string): string | null {
+  function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
@@ -216,7 +204,7 @@ export default function AddPatientModal({ open, onClose }: AddPatientModalProps)
                         <Select
                           variant="plain"
                           value={height}
-                          onChange={(_, value) => setHeight(value!)}
+                          onChange={(_, value) => setHeight(value)}
                           slotProps={{
                             listbox: {
                               variant: 'outlined',

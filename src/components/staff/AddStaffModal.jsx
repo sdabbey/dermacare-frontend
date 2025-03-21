@@ -23,39 +23,15 @@ import StepIndicator from '@mui/joy/StepIndicator';
 import Check from '@mui/icons-material/Check';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import Checkbox from '@mui/joy/Checkbox';
-import { NumericFormat, NumericFormatProps } from 'react-number-format';
+import { NumericFormat} from 'react-number-format';
 import axios from 'axios';
-import AlertVariousStates from '../../components/AlertVariousStates'; // Ensure this component exists
+import AlertVariousStates from '../AlertVariousStates'; // Ensure this component exists
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Divider from '@mui/joy/Divider';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
-interface FormData {
-  firstName: string;
-  lastName: string;
-  address: string;
-  phoneNumber: string;
-  workStatus: string;
-  email: string;
-  specialization: string;
-  assignedTreatment: string;
-  group: string;
-  gender: string;
-  dateOfBirth: string;
-  avatar: File | null; // Update this line
-  password: string;
-  confirmPassword: string;
-}
-interface AddStaffModalProps {
-  open: boolean;
-  onClose: () => void;
-}
 
-interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -68,7 +44,7 @@ const VisuallyHiddenInput = styled('input')`
   white-space: nowrap;
   width: 1px;
 `;
-const NumericFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
+const NumericFormatAdapter = React.forwardRef(
   function NumericFormatAdapter(props, ref) {
     const { onChange, ...other } = props;
 
@@ -93,10 +69,10 @@ const NumericFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
 
 const steps = ['Staff Info', 'Assigned Services', 'Working Days'];
 
-export default function AddStaffModal({ open, onClose }: AddStaffModalProps) {
+export default function AddStaffModal({ open, onClose }) {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [completedSteps, setCompletedSteps] = React.useState<boolean[]>(new Array(steps.length).fill(false));
-  const [formData, setFormData] = React.useState<FormData>({
+  const [completedSteps, setCompletedSteps] = React.useState(new Array(steps.length).fill(false));
+  const [formData, setFormData] = React.useState({
     firstName: '',
     lastName: '',
     address: '',
@@ -112,7 +88,7 @@ export default function AddStaffModal({ open, onClose }: AddStaffModalProps) {
     password: '',
     confirmPassword: ''
   });
-  const [selectedDays, setSelectedDays] = React.useState<Record<string, boolean>>({
+  const [selectedDays, setSelectedDays] = React.useState({
     Monday: false,
     Tuesday: false,
     Wednesday: false,
@@ -121,8 +97,8 @@ export default function AddStaffModal({ open, onClose }: AddStaffModalProps) {
     Saturday: false,
     Sunday: false,
   });
-  const [alert, setAlert] = React.useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const [selectedImage, setSelectedImage] = React.useState<File | null>(null); // Avatar state
+  const [alert, setAlert] = React.useState(null);
+  const [selectedImage, setSelectedImage] = React.useState(null); // Avatar state
   const handleNext = () => {
     if (isStepCompleted(activeStep)) {
       setCompletedSteps((prev) => {
@@ -167,25 +143,25 @@ export default function AddStaffModal({ open, onClose }: AddStaffModalProps) {
     setCompletedSteps(new Array(steps.length).fill(false));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     console.log(FormData)
   };
 
-  const handleSelectChange = (event: any, value: string | null) => {
+  const handleSelectChange = (event, value) => {
     if (typeof value === 'string') {
       setFormData((prev) => ({ ...prev, workStatus: value }));
     }
   };
 
-  const handleGenderChange = (event: any, value: string | null) => {
+  const handleGenderChange = (event, value) => {
     if (typeof value === 'string') {
       setFormData((prev) => ({ ...prev, gender: value }));
     }
   };
 
-  const handleGroupChange = (event: any, value: string | null) => {
+  const handleGroupChange = (event, value) => {
     if (typeof value === 'string') {
       setFormData((prev) => ({ ...prev, group: value }));
     }
@@ -193,12 +169,12 @@ export default function AddStaffModal({ open, onClose }: AddStaffModalProps) {
 
 
 
-  const handleCheckboxChange = (day: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (day) => (event) => {
     setSelectedDays((prev) => ({ ...prev, [day]: event.target.checked }));
   };
 
   //Avatar functions
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (e) => {
     const file = e.target.files?.[0];
     if (e.target.files && file) {
       setFormData((prev) => ({ ...prev, avatar: file }));
@@ -210,7 +186,7 @@ export default function AddStaffModal({ open, onClose }: AddStaffModalProps) {
     setSelectedImage(null);
   };
 
-  const isStepCompleted = (stepIndex: number): boolean => {
+  const isStepCompleted = (stepIndex) => {
     if (stepIndex === 0) {
       return Boolean(
         selectedImage &&

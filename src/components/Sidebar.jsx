@@ -262,9 +262,9 @@ export default function Sidebar() {
           <ListItemButton
             role="menuitem"
             component={Link}
-            to="/"
+            to="/dashboard"
             onClick={handleListItemClick}
-            selected={location.pathname === '/' ? true : false}>
+            selected={location.pathname === '/dashboard' ? true : false}>
             <DashboardRoundedIcon />
             <ListItemContent>
               <Typography level="title-sm">Overview</Typography>
