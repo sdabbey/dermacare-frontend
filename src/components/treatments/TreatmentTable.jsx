@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
+
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
