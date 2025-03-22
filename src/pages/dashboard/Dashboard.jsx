@@ -6,37 +6,38 @@ import Typography from '@mui/joy/Typography';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import PatientDashboard from '../../components/dashboard/PatientDashboard';
-// import useAuth from '../../hooks/useAuth';
-// import { useNavigate } from 'react-router-dom';
+import DoctorDashboard from '../../components/dashboard/DoctorDashboard';
+import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
-  // const navigate = useNavigate(); 
-  // React.useEffect(() => {
-  //   // Check localStorage or context for authentication state
-  //   const token = localStorage.getItem('token'); // Adjust based on your auth implementation
-  //   if (!token) {
-  //     navigate('/signin'); // Redirect to dashboard if token exists
-  //   }
-  // }, [navigate]);
+  const navigate = useNavigate(); 
+  React.useEffect(() => {
+    // Check localStorage or context for authentication state
+    const token = localStorage.getItem('token'); // Adjust based on your auth implementation
+    if (!token) {
+      navigate('/signin'); // Redirect to dashboard if token exists
+    }
+  }, [navigate]);
 
-//   const { user, loading, error } = useAuth();
+  const { user, loading, error } = useAuth();
 
-//   if (loading) return <Typography>Loading...</Typography>;
-//   if (error) return <Typography>Error fetching user data</Typography>;
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error fetching user data</Typography>;
 
   const renderDashboardContent = () => {
-    return <PatientDashboard />
-    // if (!user) return <Typography>Loading...</Typography>;
+   
+    if (!user) return <Typography>Loading...</Typography>;
 
-    // switch (user.role) {
-    //   case 'patient':
-    //     return <PatientDashboard />;
-    //   case 'medical':
-    //     return <DoctorDashboard />;
-    //   default:
-    //     // return <Typography></Typography>;
-    //     return <DoctorDashboard />;
-    // }
+    switch (user.role) {
+      case 'patient':
+        return <PatientDashboard />;
+      case 'medical':
+        return <DoctorDashboard />;
+      default:
+        return <Typography></Typography>
+        
+    }
   };
 
   return (
@@ -113,7 +114,7 @@ export default function Dashboard() {
               greeting = 'Good evening';
             }
 
-            return `${greeting}, ${'Yung Hydrus'}!`;
+            return `${greeting}, ${user.firstname}!`;
           })()}
         </Typography>
 

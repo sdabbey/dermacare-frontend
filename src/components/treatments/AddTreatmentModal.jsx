@@ -77,7 +77,7 @@ export default function AddTreatmentModal({open, onClose}) {
     };
     console.log(treatmentData)
     try {
-      const response = await axios.post('https://emr-backend.up.railway.app/clinic/treatments/add/', treatmentData);
+      const response = await axios.post('http://127.0.0.1:8000/clinic/treatments/add/', treatmentData);
       // onAddTreatment(response.data);
 
       setAlert({ message: 'Treatment added successfully!', type: 'success' });

@@ -42,7 +42,7 @@ export default function AddPrescriptionModal({
 
   React.useEffect(() => {
     // Fetch patients
-    axios.get('https://emr-backend.up.railway.app/accounts/patients/')
+    axios.get('http://127.0.0.1:8000/accounts/patients/')
         .then(response => {
             setPatients(response.data.map((patient) => ({
                 id: patient.id,
@@ -52,7 +52,7 @@ export default function AddPrescriptionModal({
         .catch(error => console.error('Error fetching patients:', error));
 
     // Fetch doctors
-    axios.get('https://emr-backend.up.railway.app/accounts/doctors/')
+    axios.get('http://127.0.0.1:8000/accounts/doctors/')
     .then(response => {
         setDoctors(response.data.map((doc) => ({
             id: doc.id,
@@ -120,7 +120,7 @@ export default function AddPrescriptionModal({
 
     try {
         // Send the form data to the backend
-        const response = await axios.post('https://emr-backend.up.railway.app/clinic/prescriptions/add/', formData);
+        const response = await axios.post('http://127.0.0.1:8000/clinic/prescriptions/add/', formData);
         console.log('Prescription created:', response.data);
 
         // Call the onSubmit prop to notify the parent component (if needed)

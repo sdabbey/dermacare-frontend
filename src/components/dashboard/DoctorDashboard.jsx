@@ -11,7 +11,7 @@ import InputFileUpload from './ImageUpload';
 
 
 
-export default function PatientDashboard() {
+export default function DoctorDashboard() {
   const calendar = useCalendarApp({
     views: [
       // createViewWeek(),
@@ -66,10 +66,10 @@ export default function PatientDashboard() {
       gap: '1rem',
       }}>
       {/* Add more patient-specific content here */}
-      <Box sx={{'width': '100%', 'height': '400px', 'margin': '0', display: 'flex', justifyContent: 'space-between'}}>
+      {/* <Box sx={{'width': '100%', 'height': '400px', 'margin': '0', display: 'flex', justifyContent: 'space-between'}}>
         <InputFileUpload />
         <Weather/>
-      </Box>
+      </Box> */}
       <Box
         sx={{'width': '100%', 'height': '100%'}}>
         {calendar && <ScheduleXCalendar calendarApp={calendar}/>}

@@ -15,7 +15,8 @@ const DoctorDetail = lazy(() => import('./pages/doctordetail/DoctorDetail'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Staff = lazy(() => import('./pages/staff/Staff'));
 const Treatments = lazy(() => import('./pages/treatments/Treatments'));
-
+const Assessments = lazy(() => import('./pages/assessments/Assessments'));
+const Messages = lazy(() => import('./pages/messages/Messages'));
 
 const routes = [
   { path: '/', component: LandingPage},
@@ -31,6 +32,8 @@ const routes = [
   { path: '/profile', component: Profile },
   { path: '/staff', component: Staff},
   { path: '/treatments', component: Treatments},
+  { path: '/assessments', component: Assessments},
+  { path: '/messages', component: Messages },
 ];
 
 export default routes;

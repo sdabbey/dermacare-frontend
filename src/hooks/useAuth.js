@@ -4,16 +4,16 @@ import axios from 'axios';
 
 
 const useAuth = () => {
-  const [user, setUser] = useState<null>(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const response = await axios.get('https://emr-backend.up.railway.app/accounts/me/', {
+          const response = await axios.get('http://127.0.0.1:8000/accounts/me/', {
             headers: { Authorization: `Token ${token}` },
           });
           setUser(response.data);
@@ -27,7 +27,7 @@ const useAuth = () => {
 
     fetchUser();
   }, []);
-
+  console.log(user)
   return { user, loading, error };
 };
 

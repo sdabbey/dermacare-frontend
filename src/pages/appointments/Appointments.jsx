@@ -23,7 +23,7 @@ export default function Appointments(){
 
      // Fetch data from the backend on component mount
     React.useEffect(() => {
-    axios.get('https://emr-backend.up.railway.app/accounts/doctors/')
+    axios.get('http://127.0.0.1:8000/accounts/doctors/')
         .then(response => {
             const fetchedAppointments = response.data.map((doctor) => ({
                 id: doctor.id,
@@ -60,7 +60,7 @@ export default function Appointments(){
         })
         .catch(error => console.error('Error fetching appointments:', error));
     }, []);
-    console.log("Hydrus", listItems)
+    
     const handleOpen = () => setModalOpen(true);
     const handleClose = () => setModalOpen(false);
 

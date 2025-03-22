@@ -55,7 +55,7 @@ export default function SignIn() {
     // Check localStorage or context for authentication state
     const token = localStorage.getItem('token'); // Adjust based on your auth implementation
     if (token) {
-      navigate('/'); // Redirect to dashboard if token exists
+      navigate('/dashboard'); // Redirect to dashboard if token exists
     }
   }, [navigate]);
 
@@ -72,13 +72,13 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://emr-backend.up.railway.app/accounts/signin/', {
+      const response = await axios.post('http://127.0.0.1:8000/accounts/signin/', {
         email,
         password,
       }, {withCredentials: true});
       localStorage.setItem('token', response.data.token); // Adjust based on the response structure
       setAlert({ message: 'Signin successful!', type: 'success' });
-      navigate('/')
+      navigate('/dashboard')
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setAlert({ message: error.response?.data.detail || 'Login failed', type: 'error' });

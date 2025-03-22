@@ -41,7 +41,7 @@ export default function AddAppointmentModal({
 
   React.useEffect(() => {
     // Fetch patients
-    axios.get('https://emr-backend.up.railway.app/accounts/patients/')
+    axios.get('http://127.0.0.1:8000/accounts/patients/')
         .then(response => {
             setPatients(response.data.map((patient) => ({
                 id: patient.id,
@@ -51,7 +51,7 @@ export default function AddAppointmentModal({
         .catch(error => console.error('Error fetching patients:', error));
 
     // Fetch doctors
-    axios.get('https://emr-backend.up.railway.app/accounts/doctors/')
+    axios.get('http://127.0.0.1:8000/accounts/doctors/')
     .then(response => {
         setDoctors(response.data.map((doc) => ({
             id: doc.id,
@@ -61,7 +61,7 @@ export default function AddAppointmentModal({
     })
     .catch(error => console.error('Error fetching doctors:', error));
     // Fetch treatments
-    axios.get('https://emr-backend.up.railway.app/clinic/treatments')
+    axios.get('http://127.0.0.1:8000/clinic/treatments')
         .then(response => {
             setTreatments(response.data.map((treatment) => ({
                 value: treatment.id,
@@ -100,7 +100,7 @@ export default function AddAppointmentModal({
     };
     console.log(appointmentData)
     try {
-        const response = await axios.post('https://emr-backend.up.railway.app/clinic/appointments/add/', appointmentData);
+        const response = await axios.post('http://127.0.0.1:8000/clinic/appointments/add/', appointmentData);
         console.log('Appointment created:', response.data);
 
         // Notify parent or update state here

@@ -29,7 +29,8 @@ import axios from 'axios';
 import HelpOutlineOutlined  from '@mui/icons-material/HelpOutlineOutlined';
 import HistoryOutlined  from '@mui/icons-material/HistoryOutlined';
 import PersonSearchOutlined  from '@mui/icons-material/PersonSearchOutlined';
-// import useAuth from '../hooks/useAuth'; // Import the useAuth hook
+import useAuth from '../hooks/useAuth'; // Import the useAuth hook
+import { BookOnline, Medication, People } from '@mui/icons-material';
 
 function Toggler({
   defaultExpanded = false,
@@ -59,7 +60,7 @@ function Toggler({
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-//   const { user } = useAuth(); // Fetch user data from the hook
+  const { user }  = useAuth(); // Fetch user data from the hook
 
   const handleSignout = async () => {
     try {
@@ -71,7 +72,7 @@ export default function Sidebar() {
       }
 
       const response = await axios.post(
-        'https://emr-backend.up.railway.app/accounts/signout/',
+        'http://127.0.0.1:8000/accounts/signout/',
         {},
         {
           headers: {
@@ -98,225 +99,499 @@ export default function Sidebar() {
     closeSidebar(); // Close the sidebar in mobile view
   };
 
-  // <>
-      //   <ListItem>
-      //     <ListItemButton
-      //       role="menuitem"
-      //       component={Link}
-      //       to="/"
-      //       onClick={handleListItemClick}
-      //       selected={location.pathname === '/' ? true : false}>
-      //       <DashboardRoundedIcon />
-      //       <ListItemContent>
-      //         <Typography level="title-sm">Dashboard</Typography>
-      //       </ListItemContent>
-      //     </ListItemButton>
-      //   </ListItem>
+  const renderSidebarLinks = () => {
+    if (!user) return <Typography>Loading...</Typography>;
+    switch(user.role){
+      case 'patient':
+        return (
+          <>
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/dashboard"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/dashboard' ? true : false}>
+                <DashboardRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Overview</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/assessments"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/assessments' ? true : false}>
+                <HistoryOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Assessments</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/find-a-doctor"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/find-a-doctor' ? true : false}>
+                <PersonSearchOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Find a doctor</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+            <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/messages"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/messages' ? true : false}>
+                  <QuestionAnswerRoundedIcon />
+                  <ListItemContent>
+                    <Typography level="title-sm">Messages</Typography>
+                  </ListItemContent>
+                  <Chip size="sm" color="primary" variant="solid">
+                    4
+                  </Chip>
+                </ListItemButton>
+            </ListItem>
+            
+            <Divider sx={{mt: '2rem', mb: '2rem'}} />
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/profile"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/profile' ? true : false}>
+                <PersonRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Profile</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/help-center"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/help-center' ? true : false}>
+                <HelpOutlineOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Help Center</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+            
+          </>
+        )
+      case 'medical':
+        return (
+          <>
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/dashboard"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/dashboard' ? true : false}>
+                <DashboardRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Overview</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
 
-      //   <ListItem nested>
-      //     <Toggler
-      //       renderToggle={({ open, setOpen }) => (
-      //         <ListItemButton onClick={() => setOpen(!open)}>
-      //           <AssignmentRoundedIcon />
-      //           <ListItemContent>
-      //             <Typography level="title-sm">Clinic</Typography>
-      //           </ListItemContent>
-      //           <KeyboardArrowDownIcon
-      //             sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
-      //           />
-      //         </ListItemButton>
-      //       )}
-      //     >
-      //       <List sx={{ gap: 0.5 }}>
-      //         <ListItem >
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/appointments"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/appointments' ? true : false}>
+                <BookOnline />
+                <ListItemContent>
+                  <Typography level="title-sm">Appointments</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+    
+            <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/messages"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/messages' ? true : false}>
+                  <QuestionAnswerRoundedIcon />
+                  <ListItemContent>
+                    <Typography level="title-sm">Messages</Typography>
+                  </ListItemContent>
+                  <Chip size="sm" color="primary" variant="solid">
+                    4
+                  </Chip>
+                </ListItemButton>
+            </ListItem>
+
+
+            <Divider sx={{mt: '2rem', mb: '2rem'}} />
+
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/patients"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/patients' ? true : false}>
+                <People />
+                <ListItemContent>
+                  <Typography level="title-sm">Patients</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+    
+           
+            
+            
+           
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/prescriptions"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/prescriptions' ? true : false}>
+                <Medication />
+                <ListItemContent>
+                  <Typography level="title-sm">Prescriptions</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+            
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/help-center"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/help-center' ? true : false}>
+                <HelpOutlineOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Help Center</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+            
+          </>
+        )
+      
+      case 'nursing':
+        return (
+          <>
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/dashboard"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/dashboard' ? true : false}>
+                <DashboardRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Overview</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/patients"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/patients' ? true : false}>
+                <HistoryOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Patients</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+            
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/help-center"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/help-center' ? true : false}>
+                <HelpOutlineOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Help Center</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+            
+          </>
+        )
+
+      case 'allied-health':
+        return (
+          <>
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/dashboard"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/dashboard' ? true : false}>
+                <DashboardRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Overview</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/patients"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/patients' ? true : false}>
+                <HistoryOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Patients</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+            
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/help-center"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/help-center' ? true : false}>
+                <HelpOutlineOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Help Center</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+            
+          </>
+        )
+
+      case 'support':
+        return (
+          <>
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/dashboard"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/dashboard' ? true : false}>
+                <DashboardRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Overview</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/patients"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/patients' ? true : false}>
+                <HistoryOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Patients</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/appointments"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/appointments' ? true : false}>
+                <HistoryOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Appointments</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+
+            
+    
+            <ListItem>
+              <ListItemButton
+                role="menuitem"
+                component={Link}
+                to="/help-center"
+                onClick={handleListItemClick}
+                selected={location.pathname === '/help-center' ? true : false}>
+                <HelpOutlineOutlined />
+                <ListItemContent>
+                  <Typography level="title-sm">Help Center</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+            
+          </>
+        )
+
+      case 'administrative':
+        return (
+            <>
+        <ListItem>
+          <ListItemButton
+            role="menuitem"
+            component={Link}
+            to="/"
+            onClick={handleListItemClick}
+            selected={location.pathname === '/' ? true : false}>
+            <DashboardRoundedIcon />
+            <ListItemContent>
+              <Typography level="title-sm">Dashboard</Typography>
+            </ListItemContent>
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem nested>
+          <Toggler
+            renderToggle={({ open, setOpen }) => (
+              <ListItemButton onClick={() => setOpen(!open)}>
+                <AssignmentRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Clinic</Typography>
+                </ListItemContent>
+                <KeyboardArrowDownIcon
+                  sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                />
+              </ListItemButton>
+            )}
+          >
+            <List sx={{ gap: 0.5 }}>
+              <ListItem >
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
                   
-      //             to="/patients"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/patients' ? true : false}>
-      //             <Typography level='title-sm'>Patients</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //         <ListItem>
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
-      //             to="/staff"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/staff' ? true : false}>
-      //             <Typography level='title-sm'>Staff List</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //         <ListItem>
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
-      //             to="/appointments"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/appointments' ? true : false}>
-      //             <Typography level='title-sm'>Appointments</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //         <ListItem>
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
-      //             to="/treatments"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/treatments' ? true : false}>
-      //             <Typography level='title-sm'>Treatments</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //         <ListItem>
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
-      //             to="/prescriptions"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/prescriptions' ? true : false}>
-      //             <Typography level='title-sm'>Prescriptions</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //       </List>
-      //     </Toggler>
-      //   </ListItem>
+                  to="/patients"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/patients' ? true : false}>
+                  <Typography level='title-sm'>Patients</Typography>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/staff"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/staff' ? true : false}>
+                  <Typography level='title-sm'>Staff List</Typography>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/appointments"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/appointments' ? true : false}>
+                  <Typography level='title-sm'>Appointments</Typography>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/treatments"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/treatments' ? true : false}>
+                  <Typography level='title-sm'>Treatments</Typography>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/prescriptions"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/prescriptions' ? true : false}>
+                  <Typography level='title-sm'>Prescriptions</Typography>
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Toggler>
+        </ListItem>
 
          
 
-      //   <ListItem nested>
-      //     <Toggler
-      //       renderToggle={({ open, setOpen }) => (
-      //         <ListItemButton onClick={() => setOpen(!open)}>
-      //           <AttachMoneyRoundedIcon />
-      //           <ListItemContent>
-      //             <Typography level="title-sm">Billing</Typography>
-      //           </ListItemContent>
-      //           <KeyboardArrowDownIcon
-      //             sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
-      //           />
-      //         </ListItemButton>
-      //       )}
-      //     >
-      //       <List sx={{ gap: 0.5 }}>
-      //         <ListItem>
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
-      //             to="/transactions"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/transactions' ? true : false}>
-      //             <Typography level='title-sm'>Transactions</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //         <ListItem>
-      //           <ListItemButton
-      //             role="menuitem"
-      //             component={Link}
-      //             to="/invoice"
-      //             onClick={handleListItemClick}
-      //             selected={location.pathname === '/invoice' ? true : false}>
-      //             <Typography level='title-sm'>Invoice</Typography>
-      //           </ListItemButton>
-      //         </ListItem>
-      //       </List>
-      //     </Toggler>
-      //   </ListItem>
-
-      //   <ListItem>
-      //     <ListItemButton
-      //       role="menuitem"
-      //       component={Link}
-      //       to="/profile"
-      //       onClick={handleListItemClick}
-      //       selected={location.pathname === '/profile' ? true : false}>
-      //       <PersonRoundedIcon />
-      //       <ListItemContent>
-      //         <Typography level="title-sm">Profile</Typography>
-      //       </ListItemContent>
-      //     </ListItemButton>
-      //   </ListItem>
-      //   {/* Extra Item for Messages */}
-      //   <ListItem>
-      //       <ListItemButton
-      //         role="menuitem"
-      //         component={Link}
-      //         to="/messages"
-      //         onClick={handleListItemClick}
-      //         selected={location.pathname === '/profile' ? true : false}>
-      //         <QuestionAnswerRoundedIcon />
-      //         <ListItemContent>
-      //           <Typography level="title-sm">Messages</Typography>
-      //         </ListItemContent>
-      //         <Chip size="sm" color="primary" variant="solid">
-      //           4
-      //         </Chip>
-      //       </ListItemButton>
-      //   </ListItem>
-  // </>
-  const renderSidebarLinks = () => {
-    return (
-      <>
-        <ListItem>
-          <ListItemButton
-            role="menuitem"
-            component={Link}
-            to="/dashboard"
-            onClick={handleListItemClick}
-            selected={location.pathname === '/dashboard' ? true : false}>
-            <DashboardRoundedIcon />
-            <ListItemContent>
-              <Typography level="title-sm">Overview</Typography>
-            </ListItemContent>
-          </ListItemButton>
+        <ListItem nested>
+          <Toggler
+            renderToggle={({ open, setOpen }) => (
+              <ListItemButton onClick={() => setOpen(!open)}>
+                <AttachMoneyRoundedIcon />
+                <ListItemContent>
+                  <Typography level="title-sm">Billing</Typography>
+                </ListItemContent>
+                <KeyboardArrowDownIcon
+                  sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                />
+              </ListItemButton>
+            )}
+          >
+            <List sx={{ gap: 0.5 }}>
+              <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/transactions"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/transactions' ? true : false}>
+                  <Typography level='title-sm'>Transactions</Typography>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton
+                  role="menuitem"
+                  component={Link}
+                  to="/invoice"
+                  onClick={handleListItemClick}
+                  selected={location.pathname === '/invoice' ? true : false}>
+                  <Typography level='title-sm'>Invoice</Typography>
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Toggler>
         </ListItem>
-
-        <ListItem>
-          <ListItemButton
-            role="menuitem"
-            component={Link}
-            to="/assessment"
-            onClick={handleListItemClick}
-            selected={location.pathname === '/assessment' ? true : false}>
-            <HistoryOutlined />
-            <ListItemContent>
-              <Typography level="title-sm">Assessment</Typography>
-            </ListItemContent>
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem>
-          <ListItemButton
-            role="menuitem"
-            component={Link}
-            to="/find-a-doctor"
-            onClick={handleListItemClick}
-            selected={location.pathname === '/find-a-doctor' ? true : false}>
-            <PersonSearchOutlined />
-            <ListItemContent>
-              <Typography level="title-sm">Find a doctor</Typography>
-            </ListItemContent>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-            <ListItemButton
-              role="menuitem"
-              component={Link}
-              to="/messages"
-              onClick={handleListItemClick}
-              selected={location.pathname === '/messages' ? true : false}>
-              <QuestionAnswerRoundedIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Messages</Typography>
-              </ListItemContent>
-              <Chip size="sm" color="primary" variant="solid">
-                4
-              </Chip>
-            </ListItemButton>
-        </ListItem>
-        
-        <Divider sx={{mt: '2rem', mb: '2rem'}} />
 
         <ListItem>
           <ListItemButton
@@ -331,30 +606,45 @@ export default function Sidebar() {
             </ListItemContent>
           </ListItemButton>
         </ListItem>
+        {/* Extra Item for Messages */}
+        <ListItem>
+            <ListItemButton
+              role="menuitem"
+              component={Link}
+              to="/messages"
+              onClick={handleListItemClick}
+              selected={location.pathname === '/profile' ? true : false}>
+              <QuestionAnswerRoundedIcon />
+              <ListItemContent>
+                <Typography level="title-sm">Messages</Typography>
+              </ListItemContent>
+              <Chip size="sm" color="primary" variant="solid">
+                4
+              </Chip>
+            </ListItemButton>
+        </ListItem>
+            </>
+        )
 
+      default:
+        return (
         <ListItem>
           <ListItemButton
             role="menuitem"
             component={Link}
-            to="/help-center"
+            to="/dashboard"
             onClick={handleListItemClick}
-            selected={location.pathname === '/help-center' ? true : false}>
-            <HelpOutlineOutlined />
+            selected={location.pathname === '/dashboard' ? true : false}>
+            <DashboardRoundedIcon />
             <ListItemContent>
-              <Typography level="title-sm">Help Center</Typography>
+              <Typography level="title-sm">Overview</Typography>
             </ListItemContent>
           </ListItemButton>
         </ListItem>
-
-         
-
-        
-
-        
-        {/* Extra Item for Messages */}
-        
-      </>
-    )
+        )
+      
+    }
+   
     
   };
 
@@ -422,7 +712,7 @@ export default function Sidebar() {
           <IconButton variant="soft" color="primary" size="sm">
             <BrightnessAutoRoundedIcon />
           </IconButton>
-          <Typography level="title-lg">Logo</Typography>
+          <Typography level="title-lg">Dermacare</Typography>
           <ColorSchemeToggle sx={{ ml: 'auto' }} />
         </Box>
         
@@ -450,7 +740,7 @@ export default function Sidebar() {
             />
             <Box sx={{ minWidth: 0, boxSizing: 'border-box', flex: 1 }}>
               <Typography level="title-sm"></Typography>
-              <Typography level="body-xs" sx={{fontSize: '10px'}}>testuser@gmail.com</Typography>
+              <Typography level="body-xs" sx={{fontSize: '10px'}}>{ user ? user.email : null}</Typography>
             </Box>
           </Box>
           <IconButton size="sm" variant="plain" color="neutral" onClick={handleSignout}>

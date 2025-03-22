@@ -33,7 +33,7 @@ export default function LandingPageComponent() {
                     <Button
                     variant="outlined"
                     color="primary"
-                    href="/login"
+                    href="/signin"
                     component="a"
                     sx={{  
                         paddingX: '1.5rem', 
@@ -47,7 +47,7 @@ export default function LandingPageComponent() {
                         }
                     }}
                     >
-                        Login
+                        Sign In
                     </Button>
                     <div className="nav-trigger" id="nav-trigger">
                         <span></span>

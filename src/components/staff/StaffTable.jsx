@@ -216,11 +216,12 @@ export default function StaffTable() {
   const [staff, setStaff] = React.useState([]);
   const [open, setOpen] = React.useState(false);
 
+  
   React.useEffect(() => {
     // Fetch patient data from the backend
     const fetchStaff = async () => {
       try {
-        const response = await fetch('https://emr-backend.up.railway.app/accounts/staff/'); // Adjust the API endpoint as needed
+        const response = await fetch('http://127.0.0.1:8000/accounts/staff/'); // Adjust the API endpoint as needed
         const data = await response.json();
         setStaff(data);
         console.log(data)
@@ -375,8 +376,11 @@ export default function StaffTable() {
             </tr>
           </thead>
           <tbody>
-            {stableSort(staff, getComparator(order, 'id')).map((staffmember) => (
-              <tr key={staffmember.id}>
+            {stableSort(staff, getComparator(order, 'id')).map((staffmember) =>  {
+              
+
+              return (
+                <tr key={staffmember.id}>
                 <td>
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                     <Avatar size="sm" src={
@@ -403,6 +407,7 @@ export default function StaffTable() {
                 </td>
                 
                 <td>
+                  
                   <Typography level="body-xs" sx={{ display: 'flex', gap: 1}}>
                   {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, index) => (
                       <Chip key={index} size="sm" color={staffmember.working_days.includes(day) ? 'primary' : 'neutral'} variant="solid">
@@ -437,7 +442,8 @@ export default function StaffTable() {
                   </Box>
                 </td>
               </tr>
-            ))}
+              )
+})}
           </tbody>
         </Table>
       </Sheet>

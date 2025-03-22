@@ -247,7 +247,7 @@ export default function AddStaffModal({ open, onClose }) {
 
     console.log(formDataToSend)
     try {
-      const response = await axios.post('https://emr-backend.up.railway.app/accounts/staff/create/', 
+      const response = await axios.post('http://127.0.0.1:8000/accounts/staff/create/', 
         formDataToSend,
         {
           headers: {

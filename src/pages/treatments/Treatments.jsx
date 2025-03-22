@@ -21,7 +21,7 @@ const Treatments = () => {
   React.useEffect(() => {
     const fetchTreatments = async () => {
       try {
-        const response = await axios.get('https://emr-backend.up.railway.app/clinic/treatments/');
+        const response = await axios.get('http://127.0.0.1:8000/clinic/treatments/');
         setTreatments(response.data);
       } catch (error) {
         console.error('Failed to fetch treatments:', error);
@@ -33,7 +33,7 @@ const Treatments = () => {
 
   // const handleAddTreatment = async (newTreatment: any) => {
   //   try {
-  //     const response = await axios.get('https://emr-backend.up.railway.app/clinic/treatments/');
+  //     const response = await axios.get('http://127.0.0.1:8000/clinic/treatments/');
   //     console.log(response.data)
   //     setTreatments((prev) => [...prev, response.data]);
   //     setModalOpen(false);

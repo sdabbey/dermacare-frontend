@@ -68,7 +68,7 @@ function stableSort(array, comparator) {
 }
 
 const deleteTreatment = async (id) => {
-  await axios.delete(`https://emr-backend.up.railway.app/clinic/treatments/${id}/`);
+  await axios.delete(`http://127.0.0.1:8000/clinic/treatments/${id}/`);
 };
 
 const RowMenu = ({ treatmentId, onDelete }) => {
