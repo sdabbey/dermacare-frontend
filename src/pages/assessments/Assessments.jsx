@@ -1,234 +1,311 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Box, List, ListItem, ListItemButton, Typography, Card, CardContent, Button } from "@mui/joy";
+import { Box, List, ListItem, ListItemButton, Typography, Chip, Button } from "@mui/joy";
 import CallMade from '@mui/icons-material/CallMade';
 import check_mark from "../../assets/icons/check_mark.png"; // Update with correct path
 import { KeyboardArrowDown } from "@mui/icons-material";
 import Avatar from '@mui/joy/Avatar';
 import Star  from '@mui/icons-material/Star';
 import { AccessTimeFilled, LocalHospital, LocationOn } from '@mui/icons-material';
+import AddAppointmentModal from '../../components/appointments/AddAppointmentModal';
+
+
 const treatmentSuggestions = {
+  "Abrasion, scrape, or scab": [
+    "Clean the wound with mild soap and water.",
+    "Apply an antibiotic ointment to prevent infection.",
+    "Cover with a sterile bandage and keep it dry."
+  ],
+  "Abscess": [
+    "Apply warm compresses to encourage drainage.",
+    "Seek medical attention if swelling worsens.",
+    "Take prescribed antibiotics if necessary."
+  ],
   "Acne": [
     "Use a gentle cleanser to remove excess oil.",
     "Apply benzoyl peroxide or salicylic acid treatments.",
-    "Avoid picking or squeezing pimples to prevent scarring.",
-    "Use a non-comedogenic moisturizer and sunscreen."
+    "Avoid picking or squeezing pimples to prevent scarring."
   ],
-  "Actinic keratosis": [
-    "Apply prescription creams like 5-fluorouracil or imiquimod.",
-    "Use cryotherapy (liquid nitrogen) to remove lesions.",
-    "Avoid excessive sun exposure and wear protective clothing.",
-    "Get regular dermatological check-ups for early detection."
+  "Acute and chronic dermatitis": [
+    "Apply fragrance-free moisturizers regularly.",
+    "Use corticosteroid creams for inflammation control.",
+    "Avoid known irritants and allergens."
   ],
-  "Atopic Dermatitis": [
-    "Moisturize frequently with fragrance-free creams.",
-    "Use anti-itch creams containing hydrocortisone.",
-    "Avoid harsh soaps and known allergens.",
-    "Take short, lukewarm showers instead of hot baths."
+  "Acute dermatitis, NOS": [
+    "Use antihistamines to reduce itching.",
+    "Apply a mild topical steroid to affected areas.",
+    "Keep skin hydrated with emollients."
   ],
-  "Basal Cell Carcinoma": [
-    "Seek immediate medical consultation.",
-    "Consider Mohs surgery for precise removal.",
-    "Radiation therapy may be required for large tumors.",
-    "Use high-SPF sunscreen to prevent recurrence."
+  "Allergic Contact Dermatitis": [
+    "Identify and eliminate the allergen exposure.",
+    "Apply corticosteroid creams to soothe irritation.",
+    "Take oral antihistamines if itching persists."
   ],
-  "Benign keratosis": [
-    "Use moisturizing creams to prevent dryness.",
-    "Cryotherapy or laser treatments can remove lesions.",
-    "Avoid excessive sun exposure.",
-    "Consult a dermatologist if lesions change in size or color."
+  "CD - Contact dermatitis": [
+    "Wash the affected area with mild soap and water.",
+    "Use barrier creams to protect against irritants.",
+    "Apply topical corticosteroids to reduce inflammation."
   ],
-  "Bullous": [
-    "Apply topical corticosteroids to reduce inflammation.",
-    "Avoid friction or irritation to affected areas.",
-    "Use antibiotics if blisters become infected.",
-    "Keep blisters clean and covered with sterile dressings."
+  "Cellulitis": [
+    "Seek immediate medical care for oral or IV antibiotics.",
+    "Elevate the affected limb to reduce swelling.",
+    "Keep the area clean and monitor for worsening symptoms."
   ],
-  "Candidiasis": [
-    "Apply antifungal creams like clotrimazole or miconazole.",
-    "Keep affected areas dry and clean.",
-    "Avoid tight clothing to reduce moisture buildup.",
-    "Maintain good hygiene and use probiotics if needed."
+  "Chronic dermatitis, NOS": [
+    "Maintain regular moisturization to prevent dryness.",
+    "Use topical steroids for flare-ups.",
+    "Wear soft, breathable fabrics to minimize irritation."
   ],
-  "Chicken Pox": [
-    "Take antihistamines to reduce itching.",
-    "Apply calamine lotion to soothe the skin.",
-    "Avoid scratching to prevent scarring and infection.",
-    "Get plenty of rest and stay hydrated."
+  "Cutaneous lupus": [
+    "Use sun protection to prevent flare-ups.",
+    "Apply topical steroids for skin lesions.",
+    "Consider immunosuppressants for severe cases."
   ],
-  "Cowpox": [
-    "Apply antiseptic ointments to prevent infection.",
-    "Keep lesions clean and covered with bandages.",
-    "Avoid contact with infected animals or materials.",
-    "Monitor for complications and seek medical care if needed."
+  "Cutaneous sarcoidosis": [
+    "Use corticosteroid creams for localized lesions.",
+    "Monitor for systemic symptoms affecting other organs.",
+    "Consider hydroxychloroquine or methotrexate for severe cases."
   ],
-  "Dermatofibroma": [
-    "No treatment is required unless bothersome.",
-    "Cryotherapy or surgical removal for cosmetic concerns.",
-    "Avoid excessive irritation to the area.",
-    "Regularly monitor for changes in size or color."
-  ],
-  "DrugEruption": [
-    "Discontinue the offending medication under medical supervision.",
-    "Use antihistamines to reduce itching and rash.",
-    "Apply corticosteroid creams for inflammation.",
-    "Seek immediate medical help if symptoms worsen."
+  "Drug Rash": [
+    "Discontinue the suspected medication under medical supervision.",
+    "Use antihistamines to relieve itching.",
+    "Apply soothing lotions or corticosteroid creams."
   ],
   "Eczema": [
-    "Use hypoallergenic moisturizers regularly.",
-    "Apply prescription corticosteroid creams as needed.",
-    "Avoid harsh soaps and known allergens.",
-    "Wear soft, breathable fabrics to reduce irritation."
+    "Apply thick, fragrance-free moisturizers regularly.",
+    "Use steroid creams for severe itching and inflammation.",
+    "Avoid hot showers and harsh soaps."
   ],
-  "Infestations_Bites": [
-    "Apply antiseptic cream to prevent infection.",
-    "Use anti-itch lotions or antihistamines.",
-    "Avoid scratching to prevent further irritation.",
-    "Identify and eliminate the source of infestation."
+  "Erythema multiforme": [
+    "Manage underlying infections such as herpes simplex.",
+    "Use antihistamines to control itching.",
+    "Apply topical corticosteroids for mild cases."
   ],
-  "Lupus": [
-    "Use anti-inflammatory medications as prescribed.",
-    "Avoid excessive sun exposure and use sunscreen.",
-    "Maintain a healthy diet and exercise routine.",
-    "Manage stress levels to prevent flare-ups."
+  "Folliculitis": [
+    "Apply warm compresses to reduce inflammation.",
+    "Use antibacterial or antifungal washes.",
+    "Avoid shaving the affected area until healed."
   ],
-  "Measles": [
-    "Get plenty of rest and stay hydrated.",
-    "Take vitamin A supplements if recommended.",
-    "Use fever-reducing medications like acetaminophen.",
-    "Avoid close contact with others to prevent spreading."
+  "Granuloma annulare": [
+    "Monitor mild cases as they may resolve on their own.",
+    "Apply topical corticosteroids for persistent lesions.",
+    "Consider cryotherapy for stubborn cases."
   ],
-  "Melanocytic Nevi": [
-    "Monitor for changes in size, shape, or color.",
-    "Avoid excessive sun exposure.",
-    "Consider removal if moles become atypical.",
-    "Regular dermatological check-ups are recommended."
+  "Herpes Simplex": [
+    "Use antiviral medications like acyclovir or valacyclovir.",
+    "Apply cold compresses to relieve discomfort.",
+    "Avoid skin-to-skin contact to prevent spreading."
   ],
-  "Melanoma": [
-    "Seek immediate medical attention for early treatment.",
-    "Surgical removal is often required.",
-    "Targeted therapies may be necessary for advanced cases.",
-    "Regular skin screenings to detect recurrence."
+  "Herpes Zoster": [
+    "Start antiviral therapy within 72 hours of rash onset.",
+    "Use pain relievers and topical lidocaine patches.",
+    "Keep the rash clean and covered to prevent secondary infection."
   ],
-  "MonkeyPox": [
-    "Isolate to prevent spreading.",
-    "Manage fever with over-the-counter medications.",
-    "Keep skin lesions clean and dry.",
-    "Hydrate and rest to support recovery."
+  "Hypersensitivity": [
+    "Identify and eliminate the triggering allergen.",
+    "Use antihistamines to manage symptoms.",
+    "Apply corticosteroid creams for skin reactions."
   ],
-  "Psoriasis Lichen Planus": [
-    "Apply topical corticosteroids to reduce inflammation.",
-    "Use coal tar or salicylic acid-based shampoos for scalp psoriasis.",
-    "Phototherapy (light therapy) may help manage symptoms.",
-    "Moisturize regularly to prevent dryness."
+  "Impetigo": [
+    "Keep the affected area clean and covered.",
+    "Apply topical antibiotics like mupirocin.",
+    "Take oral antibiotics if the infection spreads."
+  ],
+  "Inflicted skin lesions": [
+    "Assess the cause and prevent further trauma.",
+    "Apply antiseptic ointments to avoid infection.",
+    "Use protective dressings for healing."
+  ],
+  "Insect Bite": [
+    "Apply ice packs to reduce swelling.",
+    "Use antihistamines or calamine lotion for itching relief.",
+    "Avoid scratching to prevent secondary infection."
+  ],
+  "Intertrigo": [
+    "Keep skin folds dry and clean.",
+    "Apply antifungal or antibacterial creams as needed.",
+    "Wear breathable clothing to reduce moisture buildup."
+  ],
+  "Irritant Contact Dermatitis": [
+    "Avoid exposure to the irritating substance.",
+    "Use barrier creams to protect the skin.",
+    "Apply mild corticosteroids for inflammation relief."
+  ],
+  "Keratosis pilaris": [
+    "Use exfoliating creams containing lactic acid or salicylic acid.",
+    "Moisturize regularly to soften the skin.",
+    "Avoid harsh soaps that may dry out the skin."
+  ],
+  "Purpura": [
+    "Identify and address underlying conditions such as platelet disorders.",
+    "Avoid medications that may contribute to bleeding.",
+    "Use compression garments if necessary for support."
   ],
   "Rosacea": [
-    "Use gentle skincare products to avoid irritation.",
-    "Avoid triggers like alcohol and spicy foods.",
-    "Apply prescribed topical treatments like metronidazole.",
+    "Avoid triggers like alcohol, spicy foods, and hot drinks.",
+    "Use topical treatments like metronidazole or azelaic acid.",
     "Wear sunscreen daily to prevent flare-ups."
   ],
-  "Seborrheic Keratoses": [
-    "No treatment is necessary unless symptomatic.",
-    "Cryotherapy or laser therapy can remove lesions.",
-    "Regular monitoring for changes in appearance.",
-    "Avoid excessive sun exposure."
-  ],
-  "SkinCancer": [
-    "Immediate medical consultation is required.",
-    "Surgical removal is the most common treatment.",
-    "Radiation or chemotherapy may be necessary.",
-    "Routine skin checks to prevent recurrence."
-  ],
-  "Squamous cell carcinoma": [
+  "SCC/SCCIS": [
     "Seek immediate dermatological evaluation.",
-    "Surgical excision is often necessary.",
-    "Radiation therapy may be used for advanced cases.",
-    "Use broad-spectrum sunscreen daily."
+    "Consider surgical removal or cryotherapy.",
+    "Use sunscreen to prevent further sun damage."
   ],
-  "Sunlight Damage": [
-    "Apply aloe vera gel to soothe the skin.",
-    "Use broad-spectrum sunscreen daily.",
-    "Wear protective clothing when outdoors.",
-    "Stay hydrated to maintain skin health."
+  "Scabies": [
+    "Apply prescribed permethrin cream or oral ivermectin.",
+    "Wash clothing and bedding in hot water.",
+    "Avoid close contact until treatment is complete."
   ],
-  "Tinea Ringworm Candidiasis": [
-    "Apply antifungal creams like terbinafine.",
-    "Keep affected areas clean and dry.",
-    "Avoid sharing personal items to prevent spreading.",
-    "Wear breathable fabrics to reduce moisture buildup."
+  "Scar Condition": [
+    "Use silicone gel sheets to reduce scar appearance.",
+    "Consider laser therapy for persistent scars.",
+    "Apply vitamin E or aloe vera for natural healing."
   ],
-  "Vascular lesion": [
-    "Laser therapy can reduce appearance.",
-    "Avoid excessive sun exposure.",
-    "Monitor for any sudden changes.",
-    "Consult a specialist for personalized treatment."
+  "Seborrheic Dermatitis": [
+    "Use anti-dandruff shampoos containing ketoconazole or selenium sulfide.",
+    "Apply mild steroid creams to affected areas.",
+    "Keep the skin moisturized to reduce flaking."
   ],
-  "Vascular_Tumors": [
-    "Regular monitoring by a dermatologist.",
-    "Laser treatments may help reduce size.",
-    "Surgical removal for symptomatic cases.",
-    "Avoid trauma to affected areas."
+  "Skin and soft tissue atypical mycobacterial infection": [
+    "Take prescribed antibiotics such as clarithromycin.",
+    "Consider surgical debridement for severe cases.",
+    "Monitor for systemic involvement."
   ],
-  "Vasculitis": [
-    "Seek medical evaluation for proper diagnosis.",
-    "Use anti-inflammatory medications as prescribed.",
-    "Maintain a healthy diet to support vascular health.",
-    "Monitor for systemic symptoms."
+  "Stasis Dermatitis": [
+    "Elevate legs to reduce swelling.",
+    "Apply compression stockings to improve circulation.",
+    "Use corticosteroid creams to reduce inflammation."
   ],
-  "Warts Molluscum": [
-    "Apply salicylic acid treatments.",
-    "Cryotherapy can remove stubborn warts.",
-    "Avoid touching or scratching lesions.",
-    "Boost immune function with a healthy lifestyle."
+  "Syphilis": [
+    "Seek immediate medical treatment with penicillin injections.",
+    "Avoid sexual contact until treatment is completed.",
+    "Monitor for neurological or systemic complications."
   ],
-  "Hyperpigmentation": [
-    "Use vitamin C serums daily for brightening.",
-    "Apply SPF 50+ sunscreen to prevent dark spots.",
-    "Consider retinoid creams for skin renewal.",
-    "Try chemical peels or laser therapy under dermatological guidance."
+  "Tinea": [
+    "Use antifungal creams or oral medications.",
+    "Keep the affected area dry and clean.",
+    "Avoid sharing personal items to prevent spread."
+  ],
+  "Tinea Versicolor": [
+    "Apply antifungal shampoos or creams.",
+    "Avoid excessive heat and sweating.",
+    "Use oral antifungals for severe cases."
+  ],
+  "Urticaria": [
+    "Take antihistamines to control itching and swelling.",
+    "Avoid known allergens and triggers.",
+    "Use cool compresses for symptom relief."
+  ],
+  "Verruca vulgaris": [
+    "Apply salicylic acid or cryotherapy treatments.",
+    "Use duct tape occlusion therapy to aid removal.",
+    "Consider laser or surgical removal for persistent cases."
+  ],
+  "Viral Exanthem": [
+    "Manage symptoms with antihistamines and fever reducers.",
+    "Ensure adequate hydration and rest.",
+    "Monitor for signs of complications."
+  ],
+  "Xerosis": [
+    "Use thick moisturizers containing ceramides or urea.",
+    "Avoid hot showers and harsh soaps.",
+    "Stay hydrated to maintain skin moisture."
   ]
 };
 
-const dermatologists = [
-  {
-      id: 1,
-      name: "Dr. Emily Johnson",
-      clinic: "Dermacare Clinic",
-      location: "Gbawe, Accra",
-      time: "9:00 AM - 12:00 PM",
-      rating: "4.9/5",
-      reviews: 300,
-      description: "Expert in acne treatment, eczema care, and skin cancer prevention. Provides a holistic approach to skincare."
-    },
-    {
-      id: 2,
-      name: "Dr. Michael Owusu",
-      clinic: "SkinHealth Center",
-      location: "Kumasi, KNUST",
-      time: "10:00 AM - 3:00 PM",
-      rating: "4.8/5",
-      reviews: 250,
-      description: "Specialist in skin infections, cosmetic dermatology, and anti-aging treatments. Known for innovative skin therapies."
-    },
-    {
-      id: 3,
-      name: "Dr. Sophia Mensah",
-      clinic: "Glow Skin Clinic",
-      location: "Osu, Accra",
-      time: "8:00 AM - 1:00 PM",
-      rating: "4.7/5",
-      reviews: 280,
-      description: "Pioneer in laser treatments, pigmentation solutions, and hair restoration. Uses advanced skincare technologies."
-    }
-];
 
 export default function Assessment() {
   const location = useLocation();
   const results = location.state?.results || {};
   const [open, setOpen] = useState(true);
   const treatments = treatmentSuggestions[results.condition] || [];
+  const [staff, setStaff] = React.useState([]);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [listItems, setListItems] = React.useState([]);
+  const [patient, setPatient] = React.useState(null);
+  
+  React.useEffect(() => {
+    const fetchPatientData = async () => {
+      
+      try {
+        const token = localStorage.getItem('token');
+        if (token){
+          const response = await fetch('http://127.0.0.1:8000/accounts/me/', {
+            headers: { Authorization: `Token ${token}` },// Ensure session-based authentication if needed
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch patient data');
+          }
+          const data = await response.json();
+          setPatient(data);
+          console.log("Patient Data:", data);
+        }
+        
+      } catch (error) {
+        console.error('Error fetching patient data:', error);
+      }
+    };
+  
+    fetchPatientData();
+  }, []);
 
+  
+  React.useEffect(() => {
+      // Fetch patient data from the backend
+      const fetchStaff = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/accounts/doctors/'); // Adjust the API endpoint as needed
+          const data = await response.json();
+          setStaff(data);
+          console.log(data)
+        } catch (error) {
+          console.error('Failed to fetch staff data:', error);
+        }
+      };
+  
+      fetchStaff();
+    }, []);
+
+  const handleOpen = () => setModalOpen(true);
+  const handleClose = () => setModalOpen(false);
+
+  const handleSubmitAppointment = (newAppointment) => {
+    console.log("New Appointment Data:", newAppointment)
+    setListItems(prevItems => {
+      console.log("Previous Items:", prevItems);
+
+      const doctorExists = prevItems.some(item => item.staff === newAppointment.staff);
+      let updatedItems;
+
+      if (doctorExists) {
+        // If doctor exists, update appointments
+        updatedItems = prevItems.map(item => {
+            if (item.staff === newAppointment.doctor) {
+                return {
+                    ...item,
+                    appointments: [...item.appointments, newAppointment]
+                };
+            }
+            return item;
+        });
+      }else {
+          // If doctor does not exist, add new doctor with the appointment
+          updatedItems = [
+              ...prevItems,
+              {
+                id: newAppointment.id, // Generate or fetch proper ID
+                staff: newAppointment.doctor,
+                avatar: '', // Provide default or fetched avatar
+                available: '', // Provide default or fetched availability
+                appointments: [newAppointment]
+              }
+          ];
+      }
+      console.log("Updated Items:", updatedItems);
+      return updatedItems;
+    });
+    handleClose();
+};
   return (
     <div style={{padding: '0 2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
       <h2>Skin Analysis Results</h2>
@@ -238,7 +315,7 @@ export default function Assessment() {
           {results.condition ? (
             <div>
               <p style={{display: 'flex', alignItems: 'center', gap: '.5rem'}}><strong>Condition:</strong> <Typography level="body-md" sx={{fontWeight: 500}} color="success">{results.condition}</Typography></p>
-              <p><strong>Margin of Error:</strong> {results.confidence ? `${(results.confidence ).toFixed(2)}%` : "N/A"}</p>
+              <p><strong>Confidence:</strong> {results.confidence ? `${(results.confidence ).toFixed(2)}%` : "N/A"}</p>
 
 
               {/* Dropdown Section */}
@@ -289,7 +366,7 @@ export default function Assessment() {
       <div className='doctor-list' style={{width: '50%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem', padding: '1rem 1.5rem'}}>
           <Typography level='title-lg' sx={{px: '0.5rem'}}>See top-rated dermatologists</Typography>
           <Box className="card-container" sx={{ display: "flex", flexDirection: "column", gap: "1rem", height: "450px", overflowY: "auto", padding: '0.5rem' }}>
-          {dermatologists.map((doctor) => (
+          {staff.map((doctor) => (
               <Box
               key={doctor.id}
               sx={(theme) => ({
@@ -314,39 +391,49 @@ export default function Assessment() {
                   justifyContent: "space-between",
                   }}
               >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <Avatar />
-                  <Typography component="a" href="/find-a-doctor/1" sx={{ color: "var(--sx-color-primary)", textDecoration: 'none'}}>
-                      {doctor.name}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: "1rem", width: '60%' }}>
+                    <Avatar src={doctor.avatar} />
+                    <Typography component="a" href="/find-a-doctor/1" sx={{ color: "var(--sx-color-primary)", textDecoration: 'none'}}>
+                        {doctor.user.firstname} {doctor.user.lastname}
+                    </Typography>
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Star sx={{ color: "gold" }} />
-                  {doctor.rating} ({doctor.reviews} reviews)
+                  <Box sx={{ display: "flex", alignItems: "center", fontSize: '.9rem' }}>
+                    <Star sx={{ color: "gold" }} />
+                    4.9 (5 reviews)
                   </Box>
               </Typography>
-              <Typography level="body-sm">{doctor.description}</Typography>
+              <Typography level="body-sm">{doctor.specialization}</Typography>
+              
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography
                   level="body-sm"
                   sx={{ display: "flex", alignItems: "center", gap: ".5rem", fontWeight: "600" }}
                   >
-                  <LocalHospital sx={{ color: "var(--sx-color-primary)" }} /> {doctor.clinic}
+                  <LocalHospital sx={{ color: "var(--sx-color-primary)" }} /> Dermacare
                   </Typography>
                   <Typography
                   level="body-sm"
                   sx={{ display: "flex", alignItems: "center", gap: ".5rem", fontWeight: "600" }}
                   >
-                  <LocationOn sx={{ color: "var(--sx-color-primary)" }} /> {doctor.location}
+                  <LocationOn sx={{ color: "var(--sx-color-primary)" }} /> KNUST, Ayeduase
                   </Typography>
               </Box>
               <Typography
                   level="body-sm"
-                  sx={{ display: "flex", alignItems: "center", gap: ".5rem", fontWeight: "600" }}
+                  sx={{ display: "flex", alignItems: "center", gap: "2rem", fontWeight: "600" }}
               >
-                  <AccessTimeFilled sx={{ color: "var(--sx-color-primary)" }} /> {doctor.time}
+                  <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <AccessTimeFilled sx={{ color: "var(--sx-color-primary)" }} /> Working days:  
+                  </div> 
+                  <div style={{display: 'flex', alignItems: 'center', gap: '.5rem'}}>
+                    {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, index) => (
+                                        <Chip key={index} size="sm" color={doctor.working_days.includes(day) ? 'primary' : 'neutral'} variant="solid">
+                                          {day.charAt(0)}
+                                        </Chip>
+                                      ))}
+                  </div>
               </Typography>
-              <Button variant="outlined" color="primary">
+              <Button variant="outlined" color="primary" onClick={handleOpen}>
                   Book Appointment
               </Button>
               </Box>
@@ -366,7 +453,7 @@ export default function Assessment() {
         
     </Box>
 
-        
+        <AddAppointmentModal open={modalOpen} onClose={handleClose} onSubmit={handleSubmitAppointment} preselectedPatient={patient} />
       
     </div>
   );

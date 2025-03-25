@@ -9,7 +9,9 @@ import chat from '../../assets/icons/chat.png'
 import curve from '../../assets/curve.png'
 import curve2 from '../../assets/curve2.png'
 import { Call, CallMade, Circle, Star, Mail } from '@mui/icons-material';
-import doctorpic from '../../assets/avatar/doctorpic.jpeg'
+import doctor1 from '../../assets/avatar/doctor1.png';
+import doctor2 from '../../assets/avatar/doctor2.png';
+import doctor3 from '../../assets/avatar/doctor3.png';
 import control from '../../assets/control.png'
 
 export default function LandingPageComponent() {
@@ -25,7 +27,7 @@ export default function LandingPageComponent() {
             <div className="nav-content">
                 <li><a href="#home-section" className='active'>Home</a></li>
                 <li><a href="#about-section">About Us</a></li>
-                <li><a href="#findadoctor-section">Find a Doctor</a></li>
+                <li><a href="/find-a-doctor">Find a Doctor</a></li>
                 <li><a href="#forum-community-section">Forum/Community</a></li>
                 <li><a href="#contact-section">Contact Us</a></li>
                 <div className="extra">
@@ -113,13 +115,13 @@ export default function LandingPageComponent() {
                 </div>
                 <div className="t-card">
                     <img src={chat} alt=""/>
-                    <Typography level='title-md'>Daily Skincare Tips</Typography>
-                    <p> Personalized advice on your dashboard every day to keep your skin healthy.</p>
+                    <Typography level='title-md'>Forum & Blog</Typography>
+                    <p>Trusted dermatologist content and community discussions for your skin concerns.</p>
                 </div>
                 <div className="t-card">
                     <img src={virt_call} alt=""/>
-                    <Typography level='title-md'>Daily Skincare Tips</Typography>
-                    <p> Personalized advice on your dashboard every day to keep your skin healthy.</p>
+                    <Typography level='title-md'>Virtual Consultations</Typography>
+                    <p>Expert care through video calls or our AI-powered chatbot with image analysis.</p>
                 </div>
 
                 
@@ -171,7 +173,7 @@ export default function LandingPageComponent() {
             </Button>
         </div>
 
-        <div className="about-section">
+        <div className="about-section" id="about-section">
             <img className="bg-curve" src={curve2} alt=""/>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem'}}>
                 <Typography level="title-lg" sx={{color: 'var(--sx-color-primary)'}}>About Us</Typography>
@@ -237,7 +239,7 @@ export default function LandingPageComponent() {
                 <div className="doctor-card">
                     <div className="card-img">
                         <div className="colourful-shadow"></div>
-                        <img src={doctorpic} alt="" />
+                        <img src={doctor2} alt="" />
                     </div>
                     <div className="card-content">
                         <Typography level="body-md" 
@@ -247,7 +249,7 @@ export default function LandingPageComponent() {
                             fontWeight: 500,
                             justifyContent: 'space-between'
                             }}>
-                            Dr. Winifred Anokye
+                            Dr. Mark Ruffalo
                             <span style={{display: 'flex', alignItems: 'center', fontSize: '.9rem', fontWeight: 500}}>
                                 <Star sx={{ color: "gold" }}/>
                                 4.8/5.0
@@ -261,7 +263,7 @@ export default function LandingPageComponent() {
                 <div className="doctor-card">
                     <div className="card-img">
                         <div className="colourful-shadow"></div>
-                        <img src={doctorpic} alt="" />
+                        <img src={doctor1} alt="" />
                     </div>
                     <div className="card-content">
                         <Typography level="body-md" 
@@ -271,7 +273,7 @@ export default function LandingPageComponent() {
                             fontWeight: 500,
                             justifyContent: 'space-between'
                             }}>
-                            Dr. Winifred Anokye
+                            Dr. Lisa Kudrow
                             <span style={{display: 'flex', alignItems: 'center', fontSize: '.9rem', fontWeight: 500}}>
                                 <Star sx={{ color: "gold" }}/>
                                 4.8/5.0
@@ -285,7 +287,7 @@ export default function LandingPageComponent() {
                 <div className="doctor-card">
                     <div className="card-img">
                         <div className="colourful-shadow"></div>
-                        <img src={doctorpic} alt="" />
+                        <img src={doctor3} alt="" />
                     </div>
                     <div className="card-content">
                         <Typography level="body-md" 
@@ -295,7 +297,7 @@ export default function LandingPageComponent() {
                             fontWeight: 500,
                             justifyContent: 'space-between'
                             }}>
-                            Dr. Winifred Anokye
+                            Dr. James McIntyre
                             <span style={{display: 'flex', alignItems: 'center', fontSize: '.9rem', fontWeight: 500}}>
                                 <Star sx={{ color: "gold" }}/>
                                 4.8/5.0
@@ -321,7 +323,7 @@ export default function LandingPageComponent() {
             </Button>
         </div>
 
-        <div className="quick-action-section">
+        <div className="quick-action-section" id="contact-section">
             <img className="control-bg" src={control} alt=""/>
             <Typography level="title-lg" sx={{color: 'var(--text-color)'}}>Ready to take control of your skin health?</Typography>
             <div style={{zIndex: 10, display: 'flex', alignItems: 'center', gap: '2rem'}}>

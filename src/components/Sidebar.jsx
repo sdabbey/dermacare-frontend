@@ -606,23 +606,7 @@ export default function Sidebar() {
             </ListItemContent>
           </ListItemButton>
         </ListItem>
-        {/* Extra Item for Messages */}
-        <ListItem>
-            <ListItemButton
-              role="menuitem"
-              component={Link}
-              to="/messages"
-              onClick={handleListItemClick}
-              selected={location.pathname === '/profile' ? true : false}>
-              <QuestionAnswerRoundedIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Messages</Typography>
-              </ListItemContent>
-              <Chip size="sm" color="primary" variant="solid">
-                4
-              </Chip>
-            </ListItemButton>
-        </ListItem>
+        
             </>
         )
 

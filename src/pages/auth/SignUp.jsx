@@ -50,6 +50,8 @@ const NumericFormatAdapter = React.forwardRef(
         }}
         
         valueIsNumericString
+        maxLength={13}
+        minLength={13}
         prefix="+"
       />
     );
@@ -136,7 +138,7 @@ export default function SignUp() {
     }
     if (stepIndex === 2) {
       
-      return Boolean(formData.work && formData.ssn && formData.password && formData.confirmPassword)
+      return Boolean(formData.work && formData.password && formData.confirmPassword)
       // Here, we check if at least one day is selected.
       // return Object.values(selectedDays).some(Boolean);
     }
@@ -151,6 +153,14 @@ export default function SignUp() {
   
 
     const patientData = {
+      user: {
+        firstname: formData.firstName,
+        lastname: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        password_confirm: formData.confirmPassword,
+        role: 'patient',
+      },
       firstname: formData.firstName,
       lastname: formData.lastName,
       date_of_birth: formData.dateOfBirth,
@@ -164,7 +174,8 @@ export default function SignUp() {
       password: formData.password,
       password_confirm: formData.confirmPassword,
     }
-   
+    
+    console.log(patientData)
   
     // Check if the form is complete before submitting
     if (!isStepCompleted(activeStep)) {
@@ -466,6 +477,7 @@ export default function SignUp() {
                           name="phoneNumber"
                           value={formData.phoneNumber}
                           onChange={handleChange}
+                          placeholder='233557311180'
                           
                           sx={{ fontSize: '14px' }}
                           slotProps={{
@@ -523,7 +535,8 @@ export default function SignUp() {
                         name="ssn"
                         value={formData.ssn}
                         onChange={handleChange}
-                        placeholder="14th Street off Mid Avenue"
+                        
+                        placeholder="Optional"
                         sx={{ fontSize: '14px' }}
                       />
                     </FormControl>

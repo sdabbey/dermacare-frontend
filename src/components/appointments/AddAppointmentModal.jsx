@@ -23,6 +23,7 @@ export default function AddAppointmentModal({
   onClose,
   onSubmit,
   preselectedDoctor,
+  preselectedPatient,
   patientFirstName = '',
   patientLastName = '',
 }) {
@@ -59,6 +60,8 @@ export default function AddAppointmentModal({
             
         })));
     })
+
+    
     .catch(error => console.error('Error fetching doctors:', error));
     // Fetch treatments
     axios.get('http://127.0.0.1:8000/clinic/treatments')
@@ -77,13 +80,23 @@ export default function AddAppointmentModal({
       console.log(preselectedDoctor)
       setSelectedDoctor(preselectedDoctor);
     }
+    
   }, [preselectedDoctor]);
 
+  React.useEffect(() => {
+    if (preselectedPatient) {
+      setSelectedPatient({
+        id: preselectedPatient.id,
+        label: `${preselectedPatient.firstname} ${preselectedPatient.lastname}`,
+    });
+    }
+  }, [preselectedPatient]);
   React.useEffect(() => {
     setFirstName(patientFirstName);
     setLastName(patientLastName);
   }, [patientFirstName, patientLastName]);
 
+  console.log(selectedPatient)
   const handleTreatmentChange = (event, newValue) => {
     const selected = treatments.find(treatment => treatment.value === newValue) || null;
     setSelectedTreatment(selected);
