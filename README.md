@@ -101,7 +101,7 @@ The frontend communicates with the **Django REST API**, hosted at:
 https://dermacare-backend.up.railway.app/
 ```
 
-All API requests are handled using **Axios** via `src/services/api.js`.
+All API requests are handled using **Axios**
 
 ## 🤝 Contributing
 
