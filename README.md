@@ -1,8 +1,8 @@
-# DermaCare Frontend
+# Dermacare Frontend
 
 &#x20;
 
-**DermaCare** is a dermatology hospital management system that enables patients to have virtual skincare analysis, book appointments, view prescriptions, and communicate with doctors while providing staff with an efficient way to manage clinical operations.
+**Dermacare** is a dermatology hospital management system that enables patients to have virtual skincare analysis, book appointments, view prescriptions, and communicate with doctors while providing staff with an efficient way to manage clinical operations.
 
 This repository contains the **frontend** built with **Vite + React**, featuring a clean UI, real-time messaging, and PDF prescription downloads.
 
