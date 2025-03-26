@@ -247,7 +247,7 @@ export default function AddStaffModal({ open, onClose }) {
 
     console.log(formDataToSend)
     try {
-      const response = await axios.post('https://dermacare-group.up.railway.app/accounts/staff/create/', 
+      const response = await axios.post('https://dermacare-backend.up.railway.app/accounts/staff/create/', 
         formDataToSend,
         {
           headers: {

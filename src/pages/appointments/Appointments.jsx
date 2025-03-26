@@ -23,7 +23,7 @@ export default function Appointments(){
 
      // Fetch data from the backend on component mount
     React.useEffect(() => {
-    axios.get('https://dermacare-group.up.railway.app/accounts/doctors/')
+    axios.get('https://dermacare-backend.up.railway.app/accounts/doctors/')
         .then(response => {
             const fetchedAppointments = response.data.map((doctor) => ({
                 id: doctor.id,

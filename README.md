@@ -1,3 +1,3 @@
 # Dermacare
 
-https://dermacare-group.up.railway.app/accounts/signin/
+https://dermacare-backend.up.railway.app/accounts/signin/

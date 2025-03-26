@@ -40,7 +40,7 @@ export default function InputFileUpload() {
 
     try {
       const response = await axios.post(
-        "https://dermacare-group.up.railway.app/skin-analysis/analyze/",
+        "https://dermacare-backend.up.railway.app/skin-analysis/analyze/",
         formData,
         {
           headers: {

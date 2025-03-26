@@ -13,7 +13,7 @@ export default function Messages() {
   React.useEffect(() => {
     const token = localStorage.getItem('token'); // Retrieve token
   
-    axios.get('https://dermacare-group.up.railway.app/messaging/messages/', {
+    axios.get('https://dermacare-backend.up.railway.app/messaging/messages/', {
       headers: {
         Authorization: `Token ${token}`,
       },

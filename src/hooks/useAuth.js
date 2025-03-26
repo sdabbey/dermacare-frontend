@@ -13,7 +13,7 @@ const useAuth = () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const response = await axios.get('https://dermacare-group.up.railway.app/accounts/me/', {
+          const response = await axios.get('https://dermacare-backend.up.railway.app/accounts/me/', {
             headers: { Authorization: `Token ${token}` },
           });
           setUser(response.data);

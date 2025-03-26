@@ -139,7 +139,7 @@ export default function PrescriptionsTable() {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    axios.get('https://dermacare-group.up.railway.app/clinic/prescriptions/')
+    axios.get('https://dermacare-backend.up.railway.app/clinic/prescriptions/')
       .then(response => {
         const prescriptions = response.data.map((prescription) => {
           const totalAmount = prescription.drugs.reduce((sum, drug) => sum + parseFloat(drug.total_price), 0);

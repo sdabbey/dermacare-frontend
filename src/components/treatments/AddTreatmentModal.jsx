@@ -77,7 +77,7 @@ export default function AddTreatmentModal({open, onClose}) {
     };
     console.log(treatmentData)
     try {
-      const response = await axios.post('https://dermacare-group.up.railway.app/clinic/treatments/add/', treatmentData);
+      const response = await axios.post('https://dermacare-backend.up.railway.app/clinic/treatments/add/', treatmentData);
       // onAddTreatment(response.data);
 
       setAlert({ message: 'Treatment added successfully!', type: 'success' });

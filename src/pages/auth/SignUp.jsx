@@ -184,7 +184,7 @@ export default function SignUp() {
     }
   
     try {
-      await axios.post('https://dermacare-group.up.railway.app/accounts/patients/signup/', patientData);
+      await axios.post('https://dermacare-backend.up.railway.app/accounts/patients/signup/', patientData);
         
   
       
