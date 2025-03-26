@@ -10,7 +10,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/joy/Box';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import Button from '@mui/joy/Button';
 import PrintRoundedIcon from '@mui/icons-material/PrintRounded';
 
@@ -35,7 +35,7 @@ const downloadPDF = (row) => {
     total_price: historyItem.total_price.toFixed(2),
   }));
 
-  (pdf).autoTable({
+  autoTable(pdf, {
     startY: 30,
     head: [columns.map(col => col.header)],
     body: rows.map(row => columns.map(col => row[col.dataKey])),
@@ -45,7 +45,8 @@ const downloadPDF = (row) => {
   if (signatureElement) {
     html2canvas(signatureElement).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      pdf.addImage(imgData, 'PNG', pageWidth - 60 - 10, (pdf).autoTable.previous.finalY + 10, 65, 10);
+      pdf.addImage(imgData, 'PNG', pageWidth - 60 - 10, pdf.lastAutoTable.finalY + 10, 65, 10);
+
       pdf.save(`${row.name}_Prescription_History.pdf`);
     }).catch(error => {
       console.error('Error capturing signature:', error);
