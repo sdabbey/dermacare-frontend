@@ -365,7 +365,7 @@ export default function LandingPageComponent() {
         <footer>
             <div className="footer-content">
                 <div className="footer-logo">
-                    <img src={react} alt=""/>
+                    <img src={logo} alt=""/>
                     <h3>Dermacare</h3>
                 </div>
                 <div className="footer-links">
