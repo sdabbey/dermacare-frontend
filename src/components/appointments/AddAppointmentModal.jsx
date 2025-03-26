@@ -42,7 +42,7 @@ export default function AddAppointmentModal({
 
   React.useEffect(() => {
     // Fetch patients
-    axios.get('http://127.0.0.1:8000/accounts/patients/')
+    axios.get('https://dermacare-group.vercel.app/accounts/patients/')
         .then(response => {
             setPatients(response.data.map((patient) => ({
                 id: patient.id,
@@ -52,7 +52,7 @@ export default function AddAppointmentModal({
         .catch(error => console.error('Error fetching patients:', error));
 
     // Fetch doctors
-    axios.get('http://127.0.0.1:8000/accounts/doctors/')
+    axios.get('https://dermacare-group.vercel.app/accounts/doctors/')
     .then(response => {
         setDoctors(response.data.map((doc) => ({
             id: doc.id,
@@ -64,7 +64,7 @@ export default function AddAppointmentModal({
     
     .catch(error => console.error('Error fetching doctors:', error));
     // Fetch treatments
-    axios.get('http://127.0.0.1:8000/clinic/treatments')
+    axios.get('https://dermacare-group.vercel.app/clinic/treatments')
         .then(response => {
             setTreatments(response.data.map((treatment) => ({
                 value: treatment.id,
@@ -113,7 +113,7 @@ export default function AddAppointmentModal({
     };
     console.log(appointmentData)
     try {
-        const response = await axios.post('http://127.0.0.1:8000/clinic/appointments/add/', appointmentData);
+        const response = await axios.post('https://dermacare-group.vercel.app/clinic/appointments/add/', appointmentData);
         console.log('Appointment created:', response.data);
 
         // Notify parent or update state here

@@ -13,7 +13,7 @@ export default function Messages() {
   React.useEffect(() => {
     const token = localStorage.getItem('token'); // Retrieve token
   
-    axios.get('http://127.0.0.1:8000/messaging/messages/', {
+    axios.get('https://dermacare-group.vercel.app/messaging/messages/', {
       headers: {
         Authorization: `Token ${token}`,
       },

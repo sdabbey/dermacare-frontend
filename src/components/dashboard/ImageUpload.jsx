@@ -40,7 +40,7 @@ export default function InputFileUpload() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/skin-analysis/analyze/",
+        "https://dermacare-group.vercel.app/skin-analysis/analyze/",
         formData,
         {
           headers: {

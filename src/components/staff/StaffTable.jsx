@@ -221,7 +221,7 @@ export default function StaffTable() {
     // Fetch patient data from the backend
     const fetchStaff = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/accounts/staff/'); // Adjust the API endpoint as needed
+        const response = await fetch('https://dermacare-group.vercel.app/accounts/staff/'); // Adjust the API endpoint as needed
         const data = await response.json();
         setStaff(data);
         console.log(data)

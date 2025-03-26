@@ -184,7 +184,7 @@ export default function SignUp() {
     }
   
     try {
-      await axios.post('http://127.0.0.1:8000/accounts/patients/signup/', patientData);
+      await axios.post('https://dermacare-group.vercel.app/accounts/patients/signup/', patientData);
         
   
       

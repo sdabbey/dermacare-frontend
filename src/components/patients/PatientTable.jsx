@@ -110,7 +110,7 @@ export default function PatientTable() {
     // Fetch patient data from the backend
     const fetchPatients = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/accounts/patients/'); // Adjust the API endpoint as needed
+        const response = await fetch('https://dermacare-group.vercel.app/accounts/patients/'); // Adjust the API endpoint as needed
         const data = await response.json();
         setPatients(data);
       } catch (error) {

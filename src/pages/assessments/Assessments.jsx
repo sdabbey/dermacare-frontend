@@ -230,7 +230,7 @@ export default function Assessment() {
       try {
         const token = localStorage.getItem('token');
         if (token){
-          const response = await fetch('http://127.0.0.1:8000/accounts/me/', {
+          const response = await fetch('https://dermacare-group.vercel.app/accounts/me/', {
             headers: { Authorization: `Token ${token}` },// Ensure session-based authentication if needed
           });
           if (!response.ok) {
@@ -254,7 +254,7 @@ export default function Assessment() {
       // Fetch patient data from the backend
       const fetchStaff = async () => {
         try {
-          const response = await fetch('http://127.0.0.1:8000/accounts/doctors/'); // Adjust the API endpoint as needed
+          const response = await fetch('https://dermacare-group.vercel.app/accounts/doctors/'); // Adjust the API endpoint as needed
           const data = await response.json();
           setStaff(data);
           console.log(data)

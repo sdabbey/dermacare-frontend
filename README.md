@@ -1,3 +1,3 @@
 # Dermacare
 
-http://127.0.0.1:8000/accounts/signin/
+https://dermacare-group.vercel.app/accounts/signin/

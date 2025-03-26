@@ -139,7 +139,7 @@ export default function PrescriptionsTable() {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/clinic/prescriptions/')
+    axios.get('https://dermacare-group.vercel.app/clinic/prescriptions/')
       .then(response => {
         const prescriptions = response.data.map((prescription) => {
           const totalAmount = prescription.drugs.reduce((sum, drug) => sum + parseFloat(drug.total_price), 0);

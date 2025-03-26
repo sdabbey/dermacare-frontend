@@ -19,7 +19,7 @@ export default function ChatsPane(props) {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/accounts/patients/");
+        const response = await fetch("https://dermacare-group.vercel.app/accounts/patients/");
         const data = await response.json();
         setPatients(data);
       } catch (error) {

@@ -72,7 +72,7 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/accounts/signin/', {
+      const response = await axios.post('https://dermacare-group.vercel.app/accounts/signin/', {
         email,
         password,
       }, {withCredentials: true});

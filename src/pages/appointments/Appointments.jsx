@@ -23,7 +23,7 @@ export default function Appointments(){
 
      // Fetch data from the backend on component mount
     React.useEffect(() => {
-    axios.get('http://127.0.0.1:8000/accounts/doctors/')
+    axios.get('https://dermacare-group.vercel.app/accounts/doctors/')
         .then(response => {
             const fetchedAppointments = response.data.map((doctor) => ({
                 id: doctor.id,
