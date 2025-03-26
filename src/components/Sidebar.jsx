@@ -72,7 +72,7 @@ export default function Sidebar() {
       }
 
       const response = await axios.post(
-        'https://dermacare-group.vercel.app/accounts/signout/',
+        'https://dermacare-group.up.railway.app/accounts/signout/',
         {},
         {
           headers: {

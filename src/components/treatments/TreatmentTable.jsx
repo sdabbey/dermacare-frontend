@@ -68,7 +68,7 @@ function stableSort(array, comparator) {
 }
 
 const deleteTreatment = async (id) => {
-  await axios.delete(`https://dermacare-group.vercel.app/clinic/treatments/${id}/`);
+  await axios.delete(`https://dermacare-group.up.railway.app/clinic/treatments/${id}/`);
 };
 
 const RowMenu = ({ treatmentId, onDelete }) => {

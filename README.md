@@ -1,3 +1,3 @@
 # Dermacare
 
-https://dermacare-group.vercel.app/accounts/signin/
+https://dermacare-group.up.railway.app/accounts/signin/

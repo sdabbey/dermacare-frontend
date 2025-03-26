@@ -42,7 +42,7 @@ export default function AddPrescriptionModal({
 
   React.useEffect(() => {
     // Fetch patients
-    axios.get('https://dermacare-group.vercel.app/accounts/patients/')
+    axios.get('https://dermacare-group.up.railway.app/accounts/patients/')
         .then(response => {
             setPatients(response.data.map((patient) => ({
                 id: patient.id,
@@ -52,7 +52,7 @@ export default function AddPrescriptionModal({
         .catch(error => console.error('Error fetching patients:', error));
 
     // Fetch doctors
-    axios.get('https://dermacare-group.vercel.app/accounts/doctors/')
+    axios.get('https://dermacare-group.up.railway.app/accounts/doctors/')
     .then(response => {
         setDoctors(response.data.map((doc) => ({
             id: doc.id,
@@ -120,7 +120,7 @@ export default function AddPrescriptionModal({
 
     try {
         // Send the form data to the backend
-        const response = await axios.post('https://dermacare-group.vercel.app/clinic/prescriptions/add/', formData);
+        const response = await axios.post('https://dermacare-group.up.railway.app/clinic/prescriptions/add/', formData);
         console.log('Prescription created:', response.data);
 
         // Call the onSubmit prop to notify the parent component (if needed)

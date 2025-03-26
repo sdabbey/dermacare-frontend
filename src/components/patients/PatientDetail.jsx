@@ -157,7 +157,7 @@ export default function PatientDetail(){
         const fetchPatientDetail = async () => {
           try {
             const token = localStorage.getItem('token'); // or wherever you store your token
-            const response = await fetch(`https://dermacare-group.vercel.app/accounts/patients/${id}/`, {
+            const response = await fetch(`https://dermacare-group.up.railway.app/accounts/patients/${id}/`, {
               method: 'GET',
               headers: {
                 'Authorization': `Token ${token}`, // Add the token in the Authorization header

@@ -72,7 +72,7 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://dermacare-group.vercel.app/accounts/signin/', {
+      const response = await axios.post('https://dermacare-group.up.railway.app/accounts/signin/', {
         email,
         password,
       }, {withCredentials: true});
