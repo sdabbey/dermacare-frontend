@@ -119,5 +119,5 @@ This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for m
 
 ---
 
-💡 **Note: ** Note: For backend integration and API endpoints, refer to the [**Dermacare Backend Repository**](https://github.com/sdabbey/dermacare-backend)
+**Note:** For backend integration and API endpoints, refer to the [**Dermacare Backend Repository**](https://github.com/sdabbey/dermacare-backend)
 
