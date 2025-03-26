@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
-import react from '../../assets/react.svg'
+import logo from '../../assets/logo.png'
 import water_drop from '../../assets/icons/water_drop.png'
 import virt_call from '../../assets/icons/virt_call.png'
 import chat from '../../assets/icons/chat.png'
@@ -21,7 +21,7 @@ export default function LandingPageComponent() {
     <>
         <nav className='navbar'>
             <div className="nav-logo">
-                <img src={react}  alt=""/>
+                <img src={logo}  alt=""/>
                 <h3>Dermacare</h3>
             </div>
             <div className="nav-content">
